@@ -4,6 +4,7 @@ import Carte from '../../components/Carte'
 import colors from '../../utils/style/colors'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
+import TypesFilter from '../../components/TypesFilter'
 
 const PokemonsContainer2 = styled.div`
   > div .dataContainer {
@@ -27,7 +28,8 @@ const PokemonsContainer = styled.div`
 const InputContainer = styled.div`
   width: 80%;
   height: 50px;
-  background-color: ${colors.dark};
+  background-color:  ${({ theme }) => (theme === 'light' ? colors.backgroundThemeClair : colors.backgroundThemeSombre)};
+  color:  ${({ theme }) => (theme === 'light' ? colors.policeThemeClair : colors.policeThemeSombre)};
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -82,6 +84,9 @@ function Pokemons() {
 
   const [foundPokemons, setFoundPokemons] = useState({})
   const [isLoadingRedux, setIsLoadingRedux] = useState(true)
+  const [query, setQuery] = useState('')
+  const [activeTypes, setActiveTypes] = useState([])
+  const [isOpenFilter, setIsOpenFilter] = useState(false)
 
   if (!isLoading && isLoadingRedux) {
     setFoundPokemons(data.slice(0,20))
@@ -92,7 +97,76 @@ function Pokemons() {
     return <span>Oups il y a eu un problème</span>
   }
 
-  
+  function checkboxFilter() {
+    if (activeTypes.length === 0) {
+      setFoundPokemons(data)
+    } else {
+      const results = data.filter((pokemon) => {
+        for (const key in activeTypes) {
+          if (!pokemon.type.includes(activeTypes[key])) {
+            return null
+          }
+        }
+        return pokemon
+      })
+      setFoundPokemons(results)
+    }
+  }  
+
+  function filter(e) {
+    const keyword = e.target.value
+    setQuery(keyword)
+
+    const results = data
+      .filter((pokemon) => {
+        if (keyword === '') {
+          return pokemon
+        } else if (
+          pokemon.name.french.toLowerCase().includes(keyword.toLowerCase())
+        ) {
+          return pokemon
+        } else if (pokemon.id.toString().includes(keyword)) {
+          return pokemon
+        }
+      })
+      .filter((pokemon) => {
+        if (activeTypes.length === 0) {
+          return pokemon
+        } else {
+          for (const key in activeTypes) {
+            if (!pokemon.type.includes(activeTypes[key])) {
+              return null
+            }
+          }
+          return pokemon
+        }
+      })
+    setFoundPokemons(results)
+  }
+
+  function handleSort(ordre) {
+    if (ordre === 'numero-croissant') {
+      setFoundPokemons(
+        [...foundPokemons].sort((a, b) => a.id - b.id)
+      )
+    } else if (ordre === 'numero-decroissant') {
+      setFoundPokemons(
+        [...foundPokemons].sort((a, b) => b.id - a.id )
+      )
+    } else if (ordre === 'a-z') {
+      setFoundPokemons(
+        [...foundPokemons].sort((a, b) => {
+          return a.name.french.localeCompare(b.name.french)
+        })
+      )
+    } else if (ordre === 'z-a') {
+      setFoundPokemons(
+        [...foundPokemons].sort((a, b) => {
+          return b.name.french.localeCompare(a.name.french)
+        })
+      )
+    }
+  }
 
   return (
     <div>
@@ -102,6 +176,44 @@ function Pokemons() {
         </LoaderWrapper>
       ) : (
         <div>
+          <InputContainer>
+            <Input placeholder="Entrez un nom ou numéro" onChange={filter} />
+            <div>
+              <TitleFiltre>
+                Trier les resultats par :
+                <select onChange={(e) => handleSort(e.target.value)}>
+                  <option value="numero-croissant">Numéro croissant</option>
+                  <option value="numero-decroissant">Numéro décroissant</option>
+                  <option value="a-z">A - Z</option>
+                  <option value="z-a">Z - A</option>
+                </select>
+              </TitleFiltre>
+            </div>
+            {isOpenFilter ? (
+              <TitleFiltre onClick={() => setIsOpenFilter(false)}>
+                Cacher les filtres
+              </TitleFiltre>
+            ) : (
+              <TitleFiltre onClick={() => setIsOpenFilter(true)}>
+                Afficher les filtres
+              </TitleFiltre>
+            )}
+          </InputContainer>
+          {isOpenFilter ? (
+            <FiltreContainer>
+              <FiltreClose onClick={() => setIsOpenFilter(false)}>
+                Fermer
+              </FiltreClose>
+              <div>
+                <TypesFilter
+                  pokemonsList={data}
+                  setActiveTypes={setActiveTypes}
+                  activeTypes={activeTypes}
+                  setFoundPokemons={setFoundPokemons}
+                />
+              </div>
+            </FiltreContainer>
+          ) : null}
           <PokemonsContainer>
             {foundPokemons.map((pokemon, index) => (
               <Carte key={index} data={pokemon}></Carte>
