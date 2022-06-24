@@ -24,7 +24,7 @@ export const Loader = styled.div`
 
 export const StyledLink = styled(Link)`
   padding: 10px 15px;
-  color: ${colors.secondary};
+  color:  ${({ theme }) => (theme === 'light' ? colors.policeThemeClair : colors.policeThemeSombre)};
   text-decoration: none;
   font-size: 18px;
   text-align: center;

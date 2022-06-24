@@ -8,9 +8,14 @@ import Accueil from './pages/Accueil'
 import Erreur from './pages/Erreur'
 import Pokemons from './pages/Pokemons'
 import Pokemon from './pages/Pokemon'
+import { QueryClient, QueryClientProvider } from 'react-query'
+
+const queryClient = new QueryClient()
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
+  <QueryClientProvider client={queryClient}>
+
   <React.StrictMode>
     <Router>
       <GlobalStyle />
@@ -28,4 +33,6 @@ root.render(
       <Footer />
     </Router>
   </React.StrictMode>
+  </QueryClientProvider>,
+
 )

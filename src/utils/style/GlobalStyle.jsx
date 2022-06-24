@@ -7,7 +7,14 @@ const StyledGlobalStyle = createGlobalStyle`
 
     a {
       text-decoration: none;
-    }   
+    }
+
+    .containerGlobal {
+      min-height: 100%;
+      max-width: 72rem;
+      margin-left:auto;
+      margin-right:auto;
+    }
 `
 
 function GlobalStyle() {
