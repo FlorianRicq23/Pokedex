@@ -84,7 +84,7 @@ function Pokemons() {
   const [isLoadingRedux, setIsLoadingRedux] = useState(true)
 
   if (!isLoading && isLoadingRedux) {
-    setFoundPokemons(data)
+    setFoundPokemons(data.slice(0,20))
     setIsLoadingRedux(false)
   }
 
