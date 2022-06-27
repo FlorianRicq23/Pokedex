@@ -6,10 +6,11 @@ import Type from '../../components/Type'
 import CardEvolution from '../../components/CardEvolution'
 import colors from '../../utils/style/colors'
 import Fleche from '../../assets/fleche.png'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import PaginationPokemon from '../../components/PaginationPokemon'
 import TypeEffective from '../../components/TypeEffective'
 import TypeHP from '../../components/TypeHP'
+import { CloseButton } from '@chakra-ui/react'
 
 const PokemonWrapper2 = styled.div`
   display: flex;
@@ -203,9 +204,9 @@ function Pokemon() {
     }
   )
 
-  /*useEffect(() => {
-		document.title = `${data.name.french} !`
-	})*/
+  useEffect(() => {
+		document.title = `${data?.name?.french} | Pokedex`
+	})
 
   if (error) {
     return <span>Oups il y a eu un problème</span>
@@ -249,7 +250,7 @@ function Pokemon() {
                 {isOpen ? (
                   <CaracteristiquesMenu>
                     <CloseMenu onClick={() => setIsOpen(false)}>
-                      Fermer
+                      <CloseButton />
                     </CloseMenu>
                     <div>
                       <CaracteristiquesTitle>
