@@ -1,18 +1,28 @@
 import styled from 'styled-components'
-//import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import LogoUrl from '../../assets/logo_pokemon.png'
-import { StyledLink } from '../../utils/style/Atoms'
 import { useState } from 'react'
+import StyledLink from '../../utils/style/GlobalStyle'
 import colors from '../../utils/style/colors'
 import {
   Box,
   Flex,
+  Avatar,
   HStack,
+  IconButton,
+  Button,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Text,
+  MenuDivider,
+  useDisclosure,
   useColorModeValue,
   Stack,
-  Link,
   Image,
 } from '@chakra-ui/react'
+import { CloseButton, HamburgerIcon } from '@chakra-ui/react'
 
 const HomeLogo = styled.img`
   height: 70px;
@@ -34,68 +44,106 @@ const NavContainer = styled.nav`
 
 function Header() {
   const [theme, setTheme] = useState('non')
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
-    <Box
-      bg={
-        theme === 'light'
-          ? colors.backgroundThemeClair
-          : colors.backgroundThemeSombre
-      }
-      color={
-        theme === 'light' ? colors.policeThemeClair : colors.policeThemeSombre
-      }
-      px={4}
-    >
-      <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-        <HStack spacing={8} alignItems={'center'}>
-          <Image h={70} src={LogoUrl} alt="Logo" />
-          <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
-            <Link
-              px={2}
-              py={1}
-              rounded={'md'}
-              _hover={{
-                textDecoration: 'none',
-                bg: useColorModeValue('gray.200', 'gray.700'),
-              }}
-              href={'/'}
-            >
-              Accueil
-            </Link>
-            <Link
-              px={2}
-              py={1}
-              rounded={'md'}
-              _hover={{
-                textDecoration: 'none',
-                bg: useColorModeValue('gray.200', 'gray.700'),
-              }}
-              href={'/pokemons'}
-            >
-              Pokemons
-            </Link>
+    <>
+      <Box
+        bg={
+          theme === 'light'
+            ? colors.backgroundThemeClair
+            : colors.backgroundThemeSombre
+        }
+        color={
+          theme === 'light' ? colors.policeThemeClair : colors.policeThemeSombre
+        }
+        px={4}
+      >
+        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+          <IconButton
+            size={'md'}
+            icon={isOpen ? <CloseButton /> : <CloseButton />}
+            aria-label={'Open Menu'}
+            display={{ md: 'none' }}
+            onClick={isOpen ? onClose : onOpen}
+          />
+          <HStack spacing={8} alignItems={'center'}>
+            <Image h="40px" src={LogoUrl} alt="Logo" />
+            
           </HStack>
-        </HStack>
-      </Flex>
-    </Box>
-  )
+          <Flex alignItems={'center'}>
+          <HStack
+              as={'nav'}
+              spacing={4}
+              display={{ base: 'none', md: 'flex' }}
+            >
+              <Link to="/">
+                <Text
+                  px={2}
+                  py={1}
+                  rounded={'md'}
+                  _hover={{
+                    textDecoration: 'none',
+                    bg: colors.backgroundThemeSombre,
+                  }}
+                >
+                  Accueil
+                </Text>
+              </Link>
+              <Link to="/pokemons">
+                <Text
+                  px={2}
+                  py={1}
+                  rounded={'md'}
+                  _hover={{
+                    textDecoration: 'none',
+                    bg: colors.backgroundThemeSombre,
+                  }}
+                >
+                  Pokemons
+                </Text>
+              </Link>
+            </HStack>
+          </Flex>
+        </Flex>
 
-  /* return (
-      <NavContainer>
-      <Link to="/">
-        <HomeLogo src={Logo} />
-      </Link>
-      <div>
-        <StyledLink to="/">
-          Accueil
-        </StyledLink>
-        <StyledLink to="/pokemons">
-          Pokemons
-        </StyledLink>
-      </div>
-    </NavContainer>
-  ) */
+        {isOpen ? (
+          <Box pb={4} display={{ md: 'none' }}>
+            <Stack as={'nav'} spacing={4}>
+              <Link to="/">
+                <Text
+                  px={2}
+                  py={1}
+                  rounded={'md'}
+                  _hover={{
+                    textDecoration: 'none',
+                    bg: colors.backgroundThemeSombre,
+                    color: colors.policeThemeSombre,
+                  }}
+                >
+                  Accueil
+                </Text>
+              </Link>
+              <Link to="/pokemons">
+                <Text
+                  px={2}
+                  py={1}
+                  rounded={'md'}
+                  _hover={{
+                    textDecoration: 'none',
+                    bg: colors.backgroundThemeSombre,
+                    color: colors.policeThemeSombre,
+                  }}
+                >
+                  Pokemons
+                </Text>
+              </Link>
+            </Stack>
+          </Box>
+        ) : null}
+      </Box>
+    </>
+  )
 }
 
 export default Header
