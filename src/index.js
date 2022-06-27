@@ -8,6 +8,7 @@ import Accueil from './pages/Accueil'
 import Erreur from './pages/Erreur'
 import Pokemons from './pages/Pokemons'
 import Pokemon from './pages/Pokemon'
+import { ChakraProvider } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
 const queryClient = new QueryClient()
@@ -18,6 +19,7 @@ root.render(
 
   <React.StrictMode>
     <Router>
+    <ChakraProvider>
       <GlobalStyle />
       <Header />
       <Routes>
@@ -31,6 +33,7 @@ root.render(
         <Route exact path="*" element={<Erreur />} />
       </Routes>
       <Footer />
+      </ChakraProvider>
     </Router>
   </React.StrictMode>
   </QueryClientProvider>,

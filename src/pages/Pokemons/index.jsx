@@ -5,8 +5,10 @@ import colors from '../../utils/style/colors'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import TypesFilter from '../../components/TypesFilter'
+import { Spinner, Input } from '@chakra-ui/react'
+import Pagination from '../../components/Pagination'
 
-const PokemonsContainer2 = styled.div`
+const PokemonsContainer = styled.div`
   > div .dataContainer {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
@@ -16,20 +18,23 @@ const PokemonsContainer2 = styled.div`
   }
 `
 
-const PokemonsContainer = styled.div`
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-    grid-gap: 30px;
-    align-items: space-between;
-    justify-items: center;
-  
+const PokemonsContainer2 = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  grid-gap: 30px;
+  align-items: space-between;
+  justify-items: center;
 `
 
 const InputContainer = styled.div`
   width: 80%;
   height: 50px;
-  background-color:  ${({ theme }) => (theme === 'light' ? colors.backgroundThemeClair : colors.backgroundThemeSombre)};
-  color:  ${({ theme }) => (theme === 'light' ? colors.policeThemeClair : colors.policeThemeSombre)};
+  background-color: ${({ theme }) =>
+    theme === 'light'
+      ? colors.backgroundThemeClair
+      : colors.backgroundThemeSombre};
+  color: ${({ theme }) =>
+    theme === 'light' ? colors.policeThemeClair : colors.policeThemeSombre};
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -39,7 +44,7 @@ const InputContainer = styled.div`
   margin-bottom: 20px;
 `
 
-const Input = styled.input`
+const Inputt = styled.input`
   width: 50%;
 `
 
@@ -74,7 +79,6 @@ const LoaderWrapper = styled.div`
   justify-content: center;
 `
 
-
 function Pokemons() {
   const { data, isLoading, error } = useQuery('pokemons', async () => {
     const response = await fetch('https://api.pikaserve.xyz/pokemon/all')
@@ -89,7 +93,7 @@ function Pokemons() {
   const [isOpenFilter, setIsOpenFilter] = useState(false)
 
   if (!isLoading && isLoadingRedux) {
-    setFoundPokemons(data.slice(0,20))
+    setFoundPokemons(data)
     setIsLoadingRedux(false)
   }
 
@@ -111,7 +115,7 @@ function Pokemons() {
       })
       setFoundPokemons(results)
     }
-  }  
+  }
 
   function filter(e) {
     const keyword = e.target.value
@@ -146,13 +150,9 @@ function Pokemons() {
 
   function handleSort(ordre) {
     if (ordre === 'numero-croissant') {
-      setFoundPokemons(
-        [...foundPokemons].sort((a, b) => a.id - b.id)
-      )
+      setFoundPokemons([...foundPokemons].sort((a, b) => a.id - b.id))
     } else if (ordre === 'numero-decroissant') {
-      setFoundPokemons(
-        [...foundPokemons].sort((a, b) => b.id - a.id )
-      )
+      setFoundPokemons([...foundPokemons].sort((a, b) => b.id - a.id))
     } else if (ordre === 'a-z') {
       setFoundPokemons(
         [...foundPokemons].sort((a, b) => {
@@ -171,13 +171,17 @@ function Pokemons() {
   return (
     <div>
       {isLoading || isLoadingRedux ? (
-        <LoaderWrapper>
-          <Loader data-testid="loader" />
-        </LoaderWrapper>
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+        />
       ) : (
         <div>
           <InputContainer>
-            <Input placeholder="Entrez un nom ou numéro" onChange={filter} />
+            <Input placeholder="Entrez un nom ou numéro" onChange={filter} width='50%' variant='filled'/>
             <div>
               <TitleFiltre>
                 Trier les resultats par :
@@ -215,9 +219,12 @@ function Pokemons() {
             </FiltreContainer>
           ) : null}
           <PokemonsContainer>
-            {foundPokemons.map((pokemon, index) => (
-              <Carte key={index} data={pokemon}></Carte>
-            ))}
+          <Pagination
+              data={foundPokemons}
+              RenderComponent={Carte}
+              pageLimit={5}
+              dataLimit={20}
+            />
           </PokemonsContainer>
         </div>
       )}
