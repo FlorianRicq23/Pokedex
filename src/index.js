@@ -4,12 +4,12 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import GlobalStyle from './utils/style/GlobalStyle'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import Accueil from './pages/Accueil'
 import Erreur from './pages/Erreur'
 import Pokemons from './pages/Pokemons'
 import Pokemon from './pages/Pokemon'
 import { ChakraProvider } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import './styles.css';
 
 const queryClient = new QueryClient()
 
@@ -23,7 +23,7 @@ root.render(
       <GlobalStyle />
       <Header />
       <Routes>
-        <Route exact path="/" element={<Accueil />} />
+        <Route exact path="/" element={<Pokemons />} />
         <Route exact path="/pokemons" element={<Pokemons />} />
         <Route
           path="/pokemon/:id"

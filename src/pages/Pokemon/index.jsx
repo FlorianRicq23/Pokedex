@@ -9,7 +9,6 @@ import Fleche from '../../assets/fleche.png'
 import { useState, useEffect } from 'react'
 import PaginationPokemon from '../../components/PaginationPokemon'
 import TypeEffective from '../../components/TypeEffective'
-import TypeHP from '../../components/TypeHP'
 import { CloseButton } from '@chakra-ui/react'
 
 const PokemonWrapper2 = styled.div`
@@ -232,9 +231,7 @@ function Pokemon() {
                 alt={data.name.french}
               />
               <PokemonDetails>
-                <Description>{data.description}</Description>
-                {data.id<=809 ? <TypeHP HPValue={data.base.HP} /> : null }
-                
+                <Description>{data.description}</Description>                
                 <TypeWrapper>
                   {data.type.map((type, index) => (
                     <TypeInfoWrapper key={`${type}`}>

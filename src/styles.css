@@ -1,0 +1,115 @@
+* {
+    font-family: "PokemonLight", Optima, Helvetica, sans-serif;
+}
+
+@font-face {
+    font-family: "PokemonLight";
+    src: local("PokemonLight"), url("./assets/fonts/Pokemon-DP.ttf") format("truetype");
+    font-weight: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: "PokemonBold";
+    src: local("PokemonBold"), url("./assets/fonts/Pokemon-DP-Bold.ttf") format("truetype");
+    font-weight: bolder;
+    font-display: block;
+}
+
+:root {
+    --normal: #A8A77A;
+    --fire: #e98d47;
+    --water: #6390F0;
+    --electric: #FFE260;
+    --grass: #7AC74C;
+    --ice: #96D9D6;
+    --fighting: #CE4069;
+    --poison: #AB6AC8;
+    --ground: #E2BF65;
+    --flying: #A98FF3;
+    --psychic: #F95587;
+    --bug: #A6B91A;
+    --rock: #B6A136;
+    --ghost: #5269AC;
+    --dragon: #6F35FC;
+    --dark: #705746;
+    --steel: #B7B7CE;
+    --fairy: #EC8FE6;
+    --pokemonRed: #f00000;
+}
+
+body {
+    color: #000;
+    margin: 0px;
+    padding: 0px;
+    background: url("./assets/items/pokeball-pattern.png") top left repeat;
+    background-attachment: fixed;
+    background-size: 900px;
+    background-color: red;
+}
+
+a {
+    text-decoration: none;
+}
+
+.containerGlobal {
+    min-height: 100%;
+    max-width: 72rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.paginationItem {
+    background: #fff;
+    border: 2px solid #666;
+    padding: 10px 15px;
+    border-radius: 50%;
+    height: 45px;
+    width: 45px;
+    position: relative;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.paginationItem span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.first,
+.last,
+.prev,
+.next {
+    border: none;
+    padding: 10px;
+    color: white;
+    background-color: red;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.paginationItem.active {
+    border: 1px solid red;
+    background-color: red;
+    color: white;
+    pointer-events: none;
+}
+
+.first.disabled,
+.last.disabled,
+.prev.disabled,
+.next.disabled {
+    pointer-events: none;
+    box-shadow: none;
+    background-color: #999;
+    color: white;
+}

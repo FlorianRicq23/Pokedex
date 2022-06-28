@@ -9,6 +9,9 @@ import { Spinner, Input } from '@chakra-ui/react'
 import Pagination from '../../components/Pagination'
 
 const PokemonsContainer = styled.div`
+  background: url("../../assets/items/pokeball-pattern.png") top left repeat;
+  background-attachment: fixed;
+  background-size: 900px;
   > div .dataContainer {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));

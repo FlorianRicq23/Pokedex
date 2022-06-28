@@ -1,6 +1,5 @@
 import colors from '../../utils/style/colors'
 import LogoUrl from '../../assets/logo_pokemon.png'
-import { useState } from 'react'
 import {
   Box,
   chakra,
@@ -43,12 +42,10 @@ const SocialButton = ({
 
 
 function Footer() {
-
-  const [theme, setTheme] = useState('non')
   return (
     <Box
-      bg={theme === 'light' ? colors.backgroundThemeClair : colors.backgroundThemeSombre}
-      color={theme === 'light' ? colors.policeThemeClair : colors.policeThemeSombre}
+    bg={colors.red}
+    color={colors.white}
     >
       <Container
         as={Stack}

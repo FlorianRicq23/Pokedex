@@ -31,6 +31,7 @@ const CarteName = styled.span`
   font-size: 26px;
   font-weight: normal;
   align-self: center;
+  font-family: "PokemonBold";
 `
 
 const CarteImg = styled.img`

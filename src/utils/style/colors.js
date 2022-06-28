@@ -5,6 +5,9 @@ const colors = {
     backgroundThemeSombre: '#4F4C6B',
     policeThemeClair: '#2F2E41',
     policeThemeSombre: '#CCCED9',
+    red: '#f00000',
+    white: 'white'
+    
   }
   
   export default colors
