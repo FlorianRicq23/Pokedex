@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 import Type from '../Type'
 import { Link } from 'react-router-dom'
+import { useQuery } from 'react-query'
+import { Spinner } from '@chakra-ui/react'
 
 
 const CarteStyle = styled.div`
@@ -49,21 +51,45 @@ const TypeWrapper = styled.div`
   justify-items: center;
 `
 
-function Carte({ data }) {
+function Carte({ dataN }) {
+  const { data, isLoading, error } = useQuery(`pokemon${dataN}`, async () => {
+    //const response = await fetch('https://api.pikaserve.xyz/pokemon/all')
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${dataN}`)
+    const data = await response.json()
+    return data
+  })
+
+  if (error) {
+    return <span>Oups il y a eu un problème</span>
+  }
+  
   return (
-    <Link key={`pokemons-${data.id}`} to={`/pokemon/${data.id}`}>
+    <div>
+      {isLoading ? (
+        <Spinner
+          thickness="4px"
+          speed="0.65s"
+          emptyColor="gray.200"
+          color="blue.500"
+          size="xl"
+        />
+      ) : (
+    <Link key={`pokemons-${data.id}`} to={`/pokemon/${data.name}`}>
       <CarteStyle>
         <CarteId>No.{data.id}</CarteId>
-        <CarteImg src={data.image.hires} alt="pokemon img" />
-        <CarteName>{data.name.french}</CarteName>
+        <CarteImg src={data.sprites.other.dream_world.front_default} alt="pokemon img" />
+        <CarteName>{data.name}</CarteName>
         <TypeWrapper>
-          {data.type.map((type, index) => (
-            <Type key={`${type}`} type={type} />
+          {data.types.map((item, index) => (
+            <Type key={`${index}`} type={item.type.name} />
           ))}
         </TypeWrapper>
       </CarteStyle>
     </Link>
+      )}
+      </div>
   )
+
 }
 
 export default Carte

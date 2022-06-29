@@ -5,11 +5,10 @@ import colors from '../../utils/style/colors'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import TypesFilter from '../../components/TypesFilter'
-import { Spinner, Input } from '@chakra-ui/react'
-import Pagination from '../../components/Pagination'
+import { Spinner, Input, Center } from '@chakra-ui/react'
 
-const PokemonsContainer = styled.div`
-  background: url("../../assets/items/pokeball-pattern.png") top left repeat;
+const PokemonsContainer2 = styled.div`
+  background: url('../../assets/items/pokeball-pattern.png') top left repeat;
   background-attachment: fixed;
   background-size: 900px;
   > div .dataContainer {
@@ -21,7 +20,7 @@ const PokemonsContainer = styled.div`
   }
 `
 
-const PokemonsContainer2 = styled.div`
+const PokemonsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
   grid-gap: 30px;
@@ -83,11 +82,24 @@ const LoaderWrapper = styled.div`
 `
 
 function Pokemons() {
-  const { data, isLoading, error } = useQuery('pokemons', async () => {
-    const response = await fetch('https://api.pikaserve.xyz/pokemon/all')
+  /* const { data, isLoading, error } = useQuery(`listePokemons`, async () => {
+    const response = await fetch('https://pokeapi.co/api/v2/pokemon/')
     const data = await response.json()
     return data
-  })
+  }) */
+
+  const [page, setPage] = useState(0)
+
+  const fetchProjects = (page = 0) =>
+    fetch(
+      'https://pokeapi.co/api/v2/pokemon?offset=' + page * 20 + '&limit=20'
+    ).then((res) => res.json())
+
+  const { isLoading, isError, error, data, isFetching, isPreviousData } =
+    useQuery(['listePokemons', page], () => fetchProjects(page), {
+      keepPreviousData: true,
+    })
+
 
   const [foundPokemons, setFoundPokemons] = useState({})
   const [isLoadingRedux, setIsLoadingRedux] = useState(true)
@@ -96,7 +108,8 @@ function Pokemons() {
   const [isOpenFilter, setIsOpenFilter] = useState(false)
 
   if (!isLoading && isLoadingRedux) {
-    setFoundPokemons(data)
+    //setFoundPokemons(data)
+    setFoundPokemons(data.results)
     setIsLoadingRedux(false)
   }
 
@@ -106,9 +119,9 @@ function Pokemons() {
 
   function checkboxFilter() {
     if (activeTypes.length === 0) {
-      setFoundPokemons(data)
+      setFoundPokemons(data.results)
     } else {
-      const results = data.filter((pokemon) => {
+      const results = data.results.filter((pokemon) => {
         for (const key in activeTypes) {
           if (!pokemon.type.includes(activeTypes[key])) {
             return null
@@ -124,7 +137,7 @@ function Pokemons() {
     const keyword = e.target.value
     setQuery(keyword)
 
-    const results = data
+    const results = data.results
       .filter((pokemon) => {
         if (keyword === '') {
           return pokemon
@@ -174,17 +187,25 @@ function Pokemons() {
   return (
     <div>
       {isLoading || isLoadingRedux ? (
-        <Spinner
-          thickness="4px"
-          speed="0.65s"
-          emptyColor="gray.200"
-          color="blue.500"
-          size="xl"
-        />
+        <Center>
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+            textAlign="center"
+          />
+        </Center>
       ) : (
         <div>
           <InputContainer>
-            <Input placeholder="Entrez un nom ou numéro" onChange={filter} width='50%' variant='filled'/>
+            <Input
+              placeholder="Entrez un nom ou numéro"
+              onChange={filter}
+              width="50%"
+              variant="filled"
+            />
             <div>
               <TitleFiltre>
                 Trier les resultats par :
@@ -213,7 +234,7 @@ function Pokemons() {
               </FiltreClose>
               <div>
                 <TypesFilter
-                  pokemonsList={data}
+                  pokemonsList={data.results}
                   setActiveTypes={setActiveTypes}
                   activeTypes={activeTypes}
                   setFoundPokemons={setFoundPokemons}
@@ -222,15 +243,48 @@ function Pokemons() {
             </FiltreContainer>
           ) : null}
           <PokemonsContainer>
-          <Pagination
-              data={foundPokemons}
-              RenderComponent={Carte}
-              pageLimit={5}
-              dataLimit={20}
-            />
+            {data.results.map((pokemon, index) => (
+              <Carte key={index} dataN={pokemon.name} />
+            ))}
           </PokemonsContainer>
         </div>
       )}
+      <div className="pagination">
+      <button
+        onClick={() => setPage((old) => Math.max(old - 1, 0))}
+        className={`prev ${page+1 === 1 ? 'disabled' : ''}`}
+        disabled={page === 0}
+      >
+        Previous Page
+      </button>
+      <button
+        onClick={() => setPage(page-1)}
+        className={`prev ${page+1 === 1 ? 'disabled' : ''}`}
+        disabled={page === 0}
+      >
+        {page}
+      </button>
+      <span>Current Page: {page + 1}</span>
+      <button
+        onClick={() => setPage(page+2)}
+        disabled={page === 1}
+      >
+        {page+2}
+      </button>
+      <button
+        onClick={() => {
+          if (!isPreviousData && data?.next) {
+            setPage((old) => old + 1)
+          }
+        }}
+        // Disable the Next Page button until we know a next page is available
+        disabled={isPreviousData || !data?.next}
+        className={`next ${page === isPreviousData || !data?.next ? 'disabled' : ''}`}
+      >
+        Next Page
+      </button>
+      {isFetching ? <span> Loading...</span> : null}{' '}
+    </div>
     </div>
   )
 }

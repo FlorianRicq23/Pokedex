@@ -19,53 +19,25 @@ import {
   Stack,
   Image,
 } from '@chakra-ui/react'
-import { CloseButton, HamburgerIcon } from '@chakra-ui/react'
-
+import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
 
 function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <>
-      <Box
-        bg={colors.red}
-        color={colors.white}
-        px={4}
-
-      >
+      <Box bg={colors.red} color={colors.white} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-          <IconButton
-            size={'md'}
-            icon={isOpen ? <CloseButton /> : <CloseButton />}
-            aria-label={'Open Menu'}
-            display={{ md: 'none' }}
-            onClick={isOpen ? onClose : onOpen}
-          />
-          <HStack spacing={8} alignItems={'center'}>
-            <Image h="50px" src={LogoUrl} alt="Logo" />
-            
-          </HStack>
-          <Flex alignItems={'center'}>
-          <HStack
-              as={'nav'}
-              spacing={4}
-              display={{ base: 'none', md: 'flex' }}
-            >
+          <IconButton size={'md'} icon={isOpen ? <CloseIcon /> : <HamburgerIcon />} aria-label={'Open Menu'} display={{ md: 'none' }} onClick={isOpen ? onClose : onOpen}/>
+          <Image h="50px" src={LogoUrl} alt="Logo" />
+            <Box as={'nav'}>
               <Link to="/">
-                <Text
-                  px={2}
-                  py={1}
-                  rounded={'md'}
-                  _hover={{
-                    textDecoration: 'none',
-                    bg: colors.backgroundThemeSombre,
-                  }}
-                >
+                <Text display={{ base: 'none', md: 'flex' }}  px={2} py={1} rounded={'md'}
+                  _hover={{ textDecoration: 'none', bg: colors.backgroundThemeSombre,}} >
                   Accueil
                 </Text>
               </Link>
-            </HStack>
-          </Flex>
+            </Box>
         </Flex>
 
         {isOpen ? (
