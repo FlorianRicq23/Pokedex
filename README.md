@@ -1,3 +1,23 @@
+# React Pokédex
+
+Simple application built with ReactJS, React-Query, Chakra-UI and PokéAPI. It's main purpose is to dynamically display information about all the Pokémons available in the API. Main features of the application are:
+
+Pagination for Pokémon list
+Dynamic subpage rendering for the Pokémons
+Saving data to localStorage to prevent unnecessary requests
+Customizable UI which state is saved to localStorage
+All the errors, missing content and loading is handled
+Technologies
+
+# Technologies used to build this application are composed in a way to provide the most convenient user experience of all.
+
+React.js
+PokéAPI
+React-query
+Chakra-UI
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -1,5 +1,4 @@
 import styled from 'styled-components'
-import { Loader } from '../../utils/style/Atoms'
 import Carte from '../../components/Carte'
 import colors from '../../utils/style/colors'
 import { useState } from 'react'
@@ -74,11 +73,6 @@ const TitleFiltre = styled.p`
   &:hover {
     cursor: pointer;
   }
-`
-
-const LoaderWrapper = styled.div`
-  display: flex;
-  justify-content: center;
 `
 
 function Pokemons() {
