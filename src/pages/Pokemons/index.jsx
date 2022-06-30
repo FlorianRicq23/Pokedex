@@ -4,7 +4,23 @@ import colors from '../../utils/style/colors'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import TypesFilter from '../../components/TypesFilter'
-import { Spinner, Input, Center } from '@chakra-ui/react'
+import {
+  Spinner,
+  Input,
+  Center,
+  Select,
+  Flex,
+  IconButton,
+  Text,
+  Tooltip,
+} from '@chakra-ui/react'
+
+import {
+  ArrowRightIcon,
+  ArrowLeftIcon,
+  ChevronRightIcon,
+  ChevronLeftIcon,
+} from '@chakra-ui/icons'
 
 const PokemonsContainer2 = styled.div`
   background: url('../../assets/items/pokeball-pattern.png') top left repeat;
@@ -83,17 +99,20 @@ function Pokemons() {
   }) */
 
   const [page, setPage] = useState(0)
+  const [limit, setLimit] = useState(20)
 
   const fetchProjects = (page = 0) =>
     fetch(
-      'https://pokeapi.co/api/v2/pokemon?offset=' + page * 20 + '&limit=20'
+      'https://pokeapi.co/api/v2/pokemon?offset=' +
+        page * limit +
+        '&limit=' +
+        limit
     ).then((res) => res.json())
 
   const { isLoading, isError, error, data, isFetching, isPreviousData } =
-    useQuery(['listePokemons', page], () => fetchProjects(page), {
+    useQuery(['listePokemons', page, limit], () => fetchProjects(page), {
       keepPreviousData: true,
     })
-
 
   const [foundPokemons, setFoundPokemons] = useState({})
   const [isLoadingRedux, setIsLoadingRedux] = useState(true)
@@ -241,44 +260,81 @@ function Pokemons() {
               <Carte key={index} dataN={pokemon.name} />
             ))}
           </PokemonsContainer>
+
+          <Flex justifyContent="center" m={4} alignItems="center">
+            <Tooltip label="First Page">
+              <IconButton
+                bg={colors.red} color={colors.white}
+                _hover={{ background: colors.red, color: colors.white}}
+                onClick={() => setPage(0)}
+                disabled={page === 0}
+                icon={<ArrowLeftIcon h={3} w={3} />}
+                mr={4}
+              />
+            </Tooltip>
+            <Tooltip label="Previous Page">
+              <IconButton
+                bg={colors.red} color={colors.white}
+                _hover={{ background: colors.red, color: colors.white}}
+                onClick={() => setPage((old) => Math.max(old - 1, 0))}
+                disabled={page === 0}
+                icon={<ChevronLeftIcon h={6} w={6} />}
+                mr={4}
+              />
+            </Tooltip>
+            <Text flexShrink="0">
+              Page{' '}
+              <Text fontWeight="bold" as="span">
+                {page + 1}
+              </Text>{' '}
+              of{' '}
+              <Text fontWeight="bold" as="span">
+                {Math.ceil(data.count / limit)}
+              </Text>
+            </Text>
+            <Tooltip label="Next Page">
+              <IconButton
+                bg={colors.red} color={colors.white}
+                _hover={{ background: colors.red, color: colors.white}}
+                onClick={() => {
+                  if (!isPreviousData && data?.next) {
+                    setPage((old) => old + 1)
+                  }
+                }}
+                disabled={isPreviousData || !data?.next}
+                icon={<ChevronRightIcon h={6} w={6} />}
+                ml={4}
+              />
+            </Tooltip>
+            <Tooltip label="Last Page">
+              <IconButton
+                onClick={() => setPage(Math.ceil(data.count / limit) - 1)}
+                _hover={{ background: colors.red, color: colors.white}}
+                bg={colors.red} color={colors.white}
+                icon={<ArrowRightIcon h={3} w={3} />}
+                disabled={isPreviousData || !data?.next}
+                ml={4}
+              />
+            </Tooltip>
+          </Flex>
+
+          <Flex justifyContent="center" m={4} alignItems="center">
+            <Select
+              w={40}
+              value={limit}
+              onChange={(e) => {
+                setLimit(e.target.value)
+              }}
+            >
+              {[10, 20, 30, 40, 50].map((limit) => (
+                <option key={limit} value={limit}>
+                  Show {limit} items
+                </option>
+              ))}
+            </Select>
+          </Flex>
         </div>
       )}
-      <div className="pagination">
-      <button
-        onClick={() => setPage((old) => Math.max(old - 1, 0))}
-        className={`prev ${page+1 === 1 ? 'disabled' : ''}`}
-        disabled={page === 0}
-      >
-        Previous Page
-      </button>
-      <button
-        onClick={() => setPage(page-1)}
-        className={`prev ${page+1 === 1 ? 'disabled' : ''}`}
-        disabled={page === 0}
-      >
-        {page}
-      </button>
-      <span>Current Page: {page + 1}</span>
-      <button
-        onClick={() => setPage(page+2)}
-        disabled={page === 1}
-      >
-        {page+2}
-      </button>
-      <button
-        onClick={() => {
-          if (!isPreviousData && data?.next) {
-            setPage((old) => old + 1)
-          }
-        }}
-        // Disable the Next Page button until we know a next page is available
-        disabled={isPreviousData || !data?.next}
-        className={`next ${page === isPreviousData || !data?.next ? 'disabled' : ''}`}
-      >
-        Next Page
-      </button>
-      {isFetching ? <span> Loading...</span> : null}{' '}
-    </div>
     </div>
   )
 }
