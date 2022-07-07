@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import Carte from '../../components/Carte'
+import Card from '../../components/Card'
 import colors from '../../utils/style/colors'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
@@ -13,6 +13,7 @@ import {
   IconButton,
   Text,
   Tooltip,
+  Grid, Container
 } from '@chakra-ui/react'
 
 import {
@@ -198,7 +199,7 @@ function Pokemons() {
   }
 
   return (
-    <div>
+    <Container maxW='1520px'>
       {isLoading || isLoadingRedux ? (
         <Center>
           <Spinner
@@ -255,11 +256,14 @@ function Pokemons() {
               </div>
             </FiltreContainer>
           ) : null}
-          <PokemonsContainer>
+          <Grid 
+          templateColumns={{ base: '47% 47%', lg: '32% 32% 32%', xl: '24% 24% 24% 24%' }}
+          gap={5} 
+          alignItems={'space-between'} justifyItems='center'>
             {data.results.map((pokemon, index) => (
-              <Carte key={index} dataN={pokemon.name} />
+              <Card key={index} dataN={pokemon.name} />
             ))}
-          </PokemonsContainer>
+          </Grid>
 
           <Flex justifyContent="center" m={4} alignItems="center">
             <Tooltip label="First Page">
@@ -335,7 +339,7 @@ function Pokemons() {
           </Flex>
         </div>
       )}
-    </div>
+    </Container>
   )
 }
 

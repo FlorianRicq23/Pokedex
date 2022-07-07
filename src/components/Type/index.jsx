@@ -1,43 +1,26 @@
-import colors from '../../utils/style/colors'
-import styled from 'styled-components'
-
-const CardType = styled.div`
-  color: #F9F9FC;
-  font-size: 14px;
-  padding:3px;
-  width:90px;
-  text-align:center;
-  border-radius: 30px;
-`
-
+import { Image, HStack, Flex, Text } from '@chakra-ui/react'
 
 function Type({ type }) {
-	return (
-		<CardType key={`${type}`}
-                style={{backgroundColor: 
-                    type === 'grass' ? '#78C850' : 
-                    type === 'fire' ? '#F08030' :  
-                    type === 'water' ? '#6890F0' :
-                    type === 'bug' ? '#A8B820' :
-                    type === 'normal' ? '#A8A878' :
-                    type === 'poison' ? '#A040A0' :
-                    type === 'electric' ? '#F8D030' :
-                    type === 'ground' ? '#E0C068' :
-                    type === 'fairy' ? '#EE99AC' :
-                    type === 'fighting' ? '#C03028' :
-                    type === 'psychic' ? '#F85888' :
-                    type === 'rock' ? '#B8A038' :
-                    type === 'ghost' ? '#705898' :
-                    type === 'ice' ? '#98D8D8' :
-                    type === 'dragon' ? '#7038F8' :
-                    type === 'flying' ? '#A98FF3' :
-                    type === 'steel' ? '#B7B7CE' :
-                    type === 'dark' ? '#705746' 
-                    : 'black' }}
-                >
-                    {type}
-                </CardType>
-	)
+  const url = '/types/bigtypes/' + type + '.png'
+  return (
+    <Flex
+      className={type}
+      maxW={{ base: 90, md:145}}
+      w='100%'
+      flexDirection={'row'}
+      justifyContent='flex-start'
+      alignItems={'center'}
+      p={2}
+      h={{ base: 35, md:45}}
+      borderRadius={15}
+      backgroundColor="rgba(255, 255, 255, 0.3)"
+    >
+      <Image marginRight={{ base: 1, md:3}} h={{ base: '22px', md:'33px'}} src={url} alt="Logo" />
+      <Text className="capitalize-first-letter" fontSize={{ base: '14px', md:'20px'}}>
+        {type}{' '}
+      </Text>
+    </Flex>
+  )
 }
 
 export default Type

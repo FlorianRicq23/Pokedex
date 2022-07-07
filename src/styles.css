@@ -38,6 +38,105 @@
     --pokemonRed: #f00000;
 }
 
+.normal {
+    background-color: var(--normal);
+    color: #fff;
+}
+
+.fire {
+    background-color: var(--fire);
+    color: #fff;
+}
+
+.water {
+    background-color: var(--water);
+    color: #fff;
+}
+
+.electric {
+    background-color: var(--electric);
+    color: #000;
+}
+
+.grass {
+    background-color: var(--grass);
+    color: #fff;
+}
+
+.ice {
+    background-color: var(--ice);
+    color: #fff;
+}
+
+.fighting {
+    background-color: var(--fighting);
+    color: #fff;
+}
+
+.poison {
+    background-color: var(--poison);
+    color: #fff;
+}
+
+.ground {
+    background-color: var(--ground);
+    color: #fff;
+}
+
+.flying {
+    background-color: var(--flying);
+    color: #fff;
+}
+
+.psychic {
+    background-color: var(--psychic);
+    color: #fff;
+}
+
+.bug {
+    background-color: var(--bug);
+    color: #fff;
+}
+
+.rock {
+    background-color: var(--rock);
+    color: #fff;
+}
+
+.ghost,
+.bg-shadow {
+    background-color: var(--ghost);
+    color: #fff;
+}
+
+.dragon {
+    background-color: var(--dragon);
+    color: #fff;
+}
+
+.dark {
+    background-color: var(--dark);
+    color: #fff;
+}
+
+.steel {
+    background-color: var(--steel);
+    color: #fff;
+}
+
+.fairy {
+    background-color: var(--fairy);
+    color: #fff;
+}
+
+.capitalize-first-letter {
+    text-transform: capitalize;
+}
+
+.font-bold {
+    font-family: "PokemonBold";
+}
+
 body {
     color: #000;
     margin: 0px;
@@ -54,62 +153,7 @@ a {
 
 .containerGlobal {
     min-height: 100%;
-    max-width: 72rem;
+    max-width: 1320px;
     margin-left: auto;
     margin-right: auto;
-}
-
-.pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.paginationItem {
-    background: #fff;
-    border: 2px solid #666;
-    padding: 10px 15px;
-    border-radius: 50%;
-    height: 45px;
-    width: 45px;
-    position: relative;
-    margin: 0 5px;
-    cursor: pointer;
-}
-
-.paginationItem span {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.first,
-.last,
-.prev,
-.next {
-    border: none;
-    padding: 10px;
-    color: white;
-    background-color: red;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
-    margin: 0 10px;
-    cursor: pointer;
-}
-
-.paginationItem.active {
-    border: 1px solid red;
-    background-color: red;
-    color: white;
-    pointer-events: none;
-}
-
-.first.disabled,
-.last.disabled,
-.prev.disabled,
-.next.disabled {
-    pointer-events: none;
-    box-shadow: none;
-    background-color: #999;
-    color: white;
 }

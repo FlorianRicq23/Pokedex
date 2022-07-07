@@ -4,18 +4,9 @@ import colors from '../../utils/style/colors'
 import {
   Box,
   Flex,
-  Avatar,
-  HStack,
   IconButton,
-  Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
   Text,
-  MenuDivider,
   useDisclosure,
-  useColorModeValue,
   Stack,
   Image,
 } from '@chakra-ui/react'

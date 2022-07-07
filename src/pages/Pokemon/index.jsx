@@ -2,9 +2,13 @@ import styled from 'styled-components'
 import { useParams } from 'react-router-dom'
 import { useQuery } from 'react-query'
 import { useEffect } from 'react'
-import PaginationPokemon from '../../components/PaginationPokemon'
-import { Spinner, Center } from '@chakra-ui/react'
-
+import {
+  Spinner,
+  Center,
+  Flex,
+  Box,
+  Heading,
+} from '@chakra-ui/react'
 
 const PokemonWrapper2 = styled.div`
   display: flex;
@@ -54,26 +58,23 @@ const Id = styled.span`
 const Picture = styled.img`
   height: 90%;
   width: 90%;
-  max-width:500px;
-  margin-left:auto;
-  margin-right:auto;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
 `
 
 function Pokemon() {
   const { id: query } = useParams()
 
-  const { data, isLoading, error } = useQuery(
-    `pokemon${query}`,
-    async () => {
-      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${query}`)
-      const data = await response.json()
-      return data
-    }
-  )
+  const { data, isLoading, error } = useQuery(`pokemon${query}`, async () => {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${query}`)
+    const data = await response.json()
+    return data
+  })
 
   useEffect(() => {
-		document.title = `${data?.name} | Pokedex`
-	})
+    document.title = `${data?.name} | Pokedex`
+  })
 
   if (error) {
     return <span>Oups il y a eu un problème</span>
@@ -83,18 +84,65 @@ function Pokemon() {
     <div>
       {isLoading ? (
         <Center>
-        <Spinner
-        thickness="4px"
-        speed="0.65s"
-        emptyColor="gray.200"
-        color="blue.500"
-        size="xl"
-        textAlign='center'
-      />
-      </Center>
-        
+          <Spinner
+            thickness="4px"
+            speed="0.65s"
+            emptyColor="gray.200"
+            color="blue.500"
+            size="xl"
+            textAlign="center"
+          />
+        </Center>
       ) : (
-        <div>
+        <Box>
+          <Flex flexDirection="column" justifyContent='center' alignItems='center'>
+            <Box>
+              <Heading
+                className="font-bold capitalize-first-letter"
+                fontFamily="PokemonBold"
+                fontSize="30px"
+                align={{ base: 'center' }}
+                h={10}
+              >
+                {data?.name}
+              </Heading>
+            </Box>
+            <Box>
+              <Heading
+                className="font-bold capitalize-first-letter"
+                fontFamily="PokemonBold"
+                fontSize="30px"
+                align={{ base: 'center' }}
+                h={10}
+              >
+                Evolution Chain
+              </Heading>
+            </Box>
+            <Box>
+              <Heading
+                className="font-bold capitalize-first-letter"
+                fontFamily="PokemonBold"
+                fontSize="30px"
+                align={{ base: 'center' }}
+                h={10}
+              >
+                Species Data
+              </Heading>
+            </Box>
+            <Box>
+              <Heading
+                className="font-bold capitalize-first-letter"
+                fontFamily="PokemonBold"
+                fontSize="30px"
+                align={{ base: 'center' }}
+                h={10}
+              >
+                Move Pool
+              </Heading>
+            </Box>
+          </Flex>
+
+          {/* 
           <PokemonContainer>
             <PaginationPokemon key={`${data.id}`} id={data.id} />
             <NameWrapper>
@@ -107,9 +155,9 @@ function Pokemon() {
                 alt={data.name}
               />
             </PokemonWrapper>
-          </PokemonContainer>
-          
-        </div>
+          </PokemonContainer> 
+          */}
+        </Box>
       )}
     </div>
   )

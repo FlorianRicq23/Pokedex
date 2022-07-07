@@ -6,7 +6,26 @@ const colors = {
     policeThemeClair: '#2F2E41',
     policeThemeSombre: '#CCCED9',
     red: '#f00000',
-    white: 'white'
+    white: 'white',
+    normal: '#A8A77A',
+    fire: '#e98d47',
+    water: '#6390F0',
+    electric: '#FFE260',
+    grass: '#7AC74C',
+    ice: '#96D9D6',
+    fighting: '#CE4069',
+    poison: '#AB6AC8',
+    ground: '#E2BF65',
+    flying: '#A98FF3',
+    psychic: '#F95587',
+    bug: '#A6B91A',
+    rock: '#B6A136',
+    ghost: '#5269AC',
+    dragon: '#6F35FC',
+    dark: '#705746',
+    steel: '#B7B7CE',
+    fairy: '#EC8FE6',
+    pokemonRed: '#f00000',
     
   }
   
