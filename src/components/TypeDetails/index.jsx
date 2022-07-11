@@ -1,6 +1,6 @@
 import { Image, Flex, Text } from '@chakra-ui/react'
 
-function Type({ type }) {
+function TypeDetails({ type }) {
   const url = '/types/bigtypes/' + type + '.png'
   return (
     <Flex
@@ -13,7 +13,6 @@ function Type({ type }) {
       p={2}
       h={{ base: 35, md:45}}
       borderRadius={15}
-      backgroundColor="rgba(255, 255, 255, 0.3)"
     >
       <Image marginRight={{ base: 1, md:3}} h={{ base: '22px', md:'33px'}} src={url} alt="Logo" />
       <Text className="capitalize-first-letter" fontSize={{ base: '14dpx', md:'20px'}}>
@@ -23,4 +22,4 @@ function Type({ type }) {
   )
 }
 
-export default Type
+export default TypeDetails

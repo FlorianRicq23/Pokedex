@@ -11,6 +11,7 @@ import {
   VisuallyHidden,
 } from '@chakra-ui/react'
 import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa'
+import { useColorTheme } from '../../utils/hooks'
 
 
 const SocialButton = ({
@@ -42,9 +43,11 @@ const SocialButton = ({
 
 
 function Footer() {
+  const { colorTheme } = useColorTheme()  
+
   return (
     <Box
-    bg={colors.red}
+    className={colorTheme}
     color={colors.white}
     >
       <Container

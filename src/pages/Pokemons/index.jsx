@@ -1,7 +1,8 @@
 import styled from 'styled-components'
 import Card from '../../components/Card'
+import { useColorTheme } from '../../utils/hooks'
 import colors from '../../utils/style/colors'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
 import TypesFilter from '../../components/TypesFilter'
 import {
@@ -22,27 +23,6 @@ import {
   ChevronRightIcon,
   ChevronLeftIcon,
 } from '@chakra-ui/icons'
-
-const PokemonsContainer2 = styled.div`
-  background: url('../../assets/items/pokeball-pattern.png') top left repeat;
-  background-attachment: fixed;
-  background-size: 900px;
-  > div .dataContainer {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-    grid-gap: 30px;
-    align-items: space-between;
-    justify-items: center;
-  }
-`
-
-const PokemonsContainer = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-  grid-gap: 30px;
-  align-items: space-between;
-  justify-items: center;
-`
 
 const InputContainer = styled.div`
   width: 80%;
@@ -101,6 +81,7 @@ function Pokemons() {
 
   const [page, setPage] = useState(0)
   const [limit, setLimit] = useState(20)
+  const { colorTheme, setColorTheme } = useColorTheme()
 
   const fetchProjects = (page = 0) =>
     fetch(
@@ -115,21 +96,21 @@ function Pokemons() {
       keepPreviousData: true,
     })
 
-  const [foundPokemons, setFoundPokemons] = useState({})
-  const [isLoadingRedux, setIsLoadingRedux] = useState(true)
+  const [foundPokemons, setFoundPokemons] = useState(data)
   const [query, setQuery] = useState('')
   const [activeTypes, setActiveTypes] = useState([])
   const [isOpenFilter, setIsOpenFilter] = useState(false)
 
-  if (!isLoading && isLoadingRedux) {
-    //setFoundPokemons(data)
-    setFoundPokemons(data.results)
-    setIsLoadingRedux(false)
-  }
+  useEffect(() => {
+    document.title = `Pokedex`
+    setColorTheme('red')
+  })
 
   if (error) {
     return <span>Oups il y a eu un problème</span>
   }
+
+
 
   function checkboxFilter() {
     if (activeTypes.length === 0) {
@@ -200,7 +181,7 @@ function Pokemons() {
 
   return (
     <Container maxW='1520px'>
-      {isLoading || isLoadingRedux ? (
+      {isLoading ? (
         <Center>
           <Spinner
             thickness="4px"
@@ -260,7 +241,7 @@ function Pokemons() {
           templateColumns={{ base: '47% 47%', lg: '32% 32% 32%', xl: '24% 24% 24% 24%' }}
           gap={5} 
           alignItems={'space-between'} justifyItems='center'>
-            {data.results.map((pokemon, index) => (
+            {data?.results.map((pokemon, index) => (
               <Card key={index} dataN={pokemon.name} />
             ))}
           </Grid>

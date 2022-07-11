@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import LogoUrl from '../../assets/logo_pokemon.png'
 import colors from '../../utils/style/colors'
+import { useColorTheme } from '../../utils/hooks'
 import {
   Box,
   Flex,
@@ -14,10 +15,12 @@ import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
 
 function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { colorTheme } = useColorTheme()  
+
 
   return (
     <>
-      <Box bg={colors.red} color={colors.white} px={4}>
+      <Box className={colorTheme} color={colors.white} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           <IconButton size={'md'} icon={isOpen ? <CloseIcon /> : <HamburgerIcon />} aria-label={'Open Menu'} display={{ md: 'none' }} onClick={isOpen ? onClose : onOpen}/>
           <Image h="50px" src={LogoUrl} alt="Logo" />

@@ -111,7 +111,7 @@ function Card({ dataN }) {
                   h={90}
                   w={90}
                   src={data?.sprites.other.dream_world.front_default}
-                  alt="Logo"
+                  alt="Image de presentation de {data?.name}"
                 />
               </Box>
               <Box>
