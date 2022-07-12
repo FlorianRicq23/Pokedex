@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom/client'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import Erreur from './pages/Erreur'
+import Error from './pages/Error'
 import Pokemons from './pages/Pokemons'
 import Pokemon from './pages/Pokemon'
-import { ChakraProvider, color } from '@chakra-ui/react'
+import { ChakraProvider } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import './utils/style/styles.css'
 import { ColorThemeProvider } from './utils/context'
@@ -29,7 +29,7 @@ root.render(
                 element={<Pokemon />}
                 render={(props) => <Pokemon {...props} />}
               />
-              <Route exact path="*" element={<Erreur />} />
+              <Route exact path="*" element={<Error />} />
             </Routes>
             <Footer />
           </ColorThemeProvider>

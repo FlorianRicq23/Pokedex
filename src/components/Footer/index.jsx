@@ -10,7 +10,7 @@ import {
   useColorModeValue,
   VisuallyHidden,
 } from '@chakra-ui/react'
-import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa'
+import { FaGithub, FaLinkedinIn, FaUser } from 'react-icons/fa'
 import { useColorTheme } from '../../utils/hooks'
 
 
@@ -62,14 +62,14 @@ function Footer() {
         <Image h={30} src={LogoUrl} alt='Logo' />
         <Text align={{ base: 'center' }}>© 2022 Designed and built by Florian Ricq. All rights reserved</Text>
         <Stack direction={'row'} spacing={6}>
-          <SocialButton label={'Twitter'} href={'#'}>
-            <FaTwitter />
+          <SocialButton label={'Personnal website'} href={'http://www.florianricq.fr/'}>
+            <FaUser />
           </SocialButton>
-          <SocialButton label={'YouTube'} href={'#'}>
-            <FaYoutube />
+          <SocialButton label={'Linkedin'} href={'https://www.linkedin.com/in/florian-ricq/'}>
+            <FaLinkedinIn />
           </SocialButton>
-          <SocialButton label={'Instagram'} href={'#'}>
-            <FaInstagram />
+          <SocialButton label={'YouTube'} href={'https://github.com/FlorianRicq23'}>
+            <FaGithub />
           </SocialButton>
         </Stack>
       </Container>

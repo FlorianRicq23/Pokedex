@@ -179,6 +179,8 @@ function Pokemons() {
     }
   }
 
+  
+
   return (
     <Container maxW='1520px'>
       {isLoading ? (

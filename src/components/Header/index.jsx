@@ -22,13 +22,13 @@ function Header() {
     <>
       <Box className={colorTheme} color={colors.white} px={4}>
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-          <IconButton size={'md'} icon={isOpen ? <CloseIcon /> : <HamburgerIcon />} aria-label={'Open Menu'} display={{ md: 'none' }} onClick={isOpen ? onClose : onOpen}/>
+          <IconButton size={'md'} bg='#4F4C6B' icon={isOpen ? <CloseIcon /> : <HamburgerIcon />} aria-label={'Open Menu'} display={{ md: 'none' }} onClick={isOpen ? onClose : onOpen}/>
           <Image h="50px" src={LogoUrl} alt="Logo" />
             <Box as={'nav'}>
               <Link to="/">
                 <Text display={{ base: 'none', md: 'flex' }}  px={2} py={1} rounded={'md'}
                   _hover={{ textDecoration: 'none', bg: colors.backgroundThemeSombre,}} >
-                  Accueil
+                  Home
                 </Text>
               </Link>
             </Box>
@@ -42,13 +42,14 @@ function Header() {
                   px={2}
                   py={1}
                   rounded={'md'}
+                  bg='#4F4C6B'
                   _hover={{
                     textDecoration: 'none',
                     bg: colors.backgroundThemeSombre,
                     color: colors.policeThemeSombre,
                   }}
                 >
-                  Accueil
+                  Home
                 </Text>
               </Link>
             </Stack>
