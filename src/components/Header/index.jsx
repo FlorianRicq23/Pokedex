@@ -26,7 +26,7 @@ function Header() {
           <Image h="50px" src={LogoUrl} alt="Logo" />
             <Box as={'nav'}>
               <Link to="/">
-                <Text display={{ base: 'none', md: 'flex' }}  px={2} py={1} rounded={'md'}
+                <Text display={{ base: 'none', md: 'flex' }} fontSize={22} px={2} py={1} rounded={'md'}
                   _hover={{ textDecoration: 'none', bg: colors.backgroundThemeSombre,}} >
                   Home
                 </Text>

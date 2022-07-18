@@ -1,15 +1,14 @@
-import styled from 'styled-components'
 import Card from '../../components/Card'
 import { useColorTheme } from '../../utils/hooks'
 import colors from '../../utils/style/colors'
 import { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
-import TypesFilter from '../../components/TypesFilter'
+import axios from "axios";
 import {
   Spinner,
   Input,
   Center,
-  Select,
+  Select,Box,
   Flex,
   IconButton,
   Text,
@@ -24,166 +23,47 @@ import {
   ChevronLeftIcon,
 } from '@chakra-ui/icons'
 
-const InputContainer = styled.div`
-  width: 80%;
-  height: 50px;
-  background-color: ${({ theme }) =>
-    theme === 'light'
-      ? colors.backgroundThemeClair
-      : colors.backgroundThemeSombre};
-  color: ${({ theme }) =>
-    theme === 'light' ? colors.policeThemeClair : colors.policeThemeSombre};
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 10px;
-  margin-bottom: 20px;
-`
-
-const Inputt = styled.input`
-  width: 50%;
-`
-
-const FiltreContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  background-color: red;
-  color: white;
-  border-radius: 10px;
-  padding: 20px;
-  padding-top: 0;
-  width: 80%;
-  margin-left: auto;
-  margin-right: auto;
-`
-const FiltreClose = styled.span`
-  align-self: flex-end;
-  margin: 10px;
-`
-
-const TitleFiltre = styled.p`
-  color: white;
-  &:hover {
-    cursor: pointer;
-  }
-`
 
 function Pokemons() {
-  /* const { data, isLoading, error } = useQuery(`listePokemons`, async () => {
-    const response = await fetch('https://pokeapi.co/api/v2/pokemon/')
-    const data = await response.json()
-    return data
-  }) */
-
   const [page, setPage] = useState(0)
   const [limit, setLimit] = useState(20)
   const { colorTheme, setColorTheme } = useColorTheme()
 
-  const fetchProjects = (page = 0) =>
-    fetch(
-      'https://pokeapi.co/api/v2/pokemon?offset=' +
-        page * limit +
-        '&limit=' +
-        limit
-    ).then((res) => res.json())
+  async function fetchPokemons(page = 0) {
+    const { data } = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=' + page * limit + '&limit=' + limit)
+    return data
+  }
 
-  const { isLoading, isError, error, data, isFetching, isPreviousData } =
-    useQuery(['listePokemons', page, limit], () => fetchProjects(page), {
+  async function fetchTypes() {
+    const { data } = await axios.get('https://pokeapi.co/api/v2/type')
+    return data
+  }
+
+  const { status, error, data, isFetching, isPreviousData } =
+    useQuery(['listePokemons', page, limit], () => fetchPokemons(page), {
       keepPreviousData: true,
     })
 
-  const [foundPokemons, setFoundPokemons] = useState(data)
-  const [query, setQuery] = useState('')
-  const [activeTypes, setActiveTypes] = useState([])
-  const [isOpenFilter, setIsOpenFilter] = useState(false)
+
+  const { status:statusTypes, error : errorTypes, data : dataTypes, isFetching: isFetchingTypes} =
+    useQuery(['listeTypes'], () => fetchTypes())
+    
+
 
   useEffect(() => {
     document.title = `Pokedex`
     setColorTheme('red')
+
   })
+
 
   if (error) {
     return <span>Oups il y a eu un problème</span>
   }
 
-
-
-  function checkboxFilter() {
-    if (activeTypes.length === 0) {
-      setFoundPokemons(data.results)
-    } else {
-      const results = data.results.filter((pokemon) => {
-        for (const key in activeTypes) {
-          if (!pokemon.type.includes(activeTypes[key])) {
-            return null
-          }
-        }
-        return pokemon
-      })
-      setFoundPokemons(results)
-    }
-  }
-
-  function filter(e) {
-    const keyword = e.target.value
-    setQuery(keyword)
-
-    const results = data.results
-      .filter((pokemon) => {
-        if (keyword === '') {
-          return pokemon
-        } else if (
-          pokemon.name.french.toLowerCase().includes(keyword.toLowerCase())
-        ) {
-          return pokemon
-        } else if (pokemon.id.toString().includes(keyword)) {
-          return pokemon
-        }
-      })
-      .filter((pokemon) => {
-        if (activeTypes.length === 0) {
-          return pokemon
-        } else {
-          for (const key in activeTypes) {
-            if (!pokemon.type.includes(activeTypes[key])) {
-              return null
-            }
-          }
-          return pokemon
-        }
-      })
-    setFoundPokemons(results)
-  }
-
-  function handleSort(ordre) {
-    if (ordre === 'numero-croissant') {
-      setFoundPokemons([...foundPokemons].sort((a, b) => a.id - b.id))
-    } else if (ordre === 'numero-decroissant') {
-      setFoundPokemons([...foundPokemons].sort((a, b) => b.id - a.id))
-    } else if (ordre === 'a-z') {
-      setFoundPokemons(
-        [...foundPokemons].sort((a, b) => {
-          return a.name.french.localeCompare(b.name.french)
-        })
-      )
-    } else if (ordre === 'z-a') {
-      setFoundPokemons(
-        [...foundPokemons].sort((a, b) => {
-          return b.name.french.localeCompare(a.name.french)
-        })
-      )
-    }
-  }
-
-  
-
   return (
     <Container maxW='1520px'>
-      {isLoading ? (
+      {status==='loading' ? (
         <Center>
           <Spinner
             thickness="4px"
@@ -196,49 +76,13 @@ function Pokemons() {
         </Center>
       ) : (
         <div>
-          <InputContainer>
-            <Input
-              placeholder="Entrez un nom ou numéro"
-              onChange={filter}
-              width="50%"
-              variant="filled"
-            />
-            <div>
-              <TitleFiltre>
-                Trier les resultats par :
-                <select onChange={(e) => handleSort(e.target.value)}>
-                  <option value="numero-croissant">Numéro croissant</option>
-                  <option value="numero-decroissant">Numéro décroissant</option>
-                  <option value="a-z">A - Z</option>
-                  <option value="z-a">Z - A</option>
-                </select>
-              </TitleFiltre>
-            </div>
-            {isOpenFilter ? (
-              <TitleFiltre onClick={() => setIsOpenFilter(false)}>
-                Cacher les filtres
-              </TitleFiltre>
-            ) : (
-              <TitleFiltre onClick={() => setIsOpenFilter(true)}>
-                Afficher les filtres
-              </TitleFiltre>
-            )}
-          </InputContainer>
-          {isOpenFilter ? (
-            <FiltreContainer>
-              <FiltreClose onClick={() => setIsOpenFilter(false)}>
-                Fermer
-              </FiltreClose>
-              <div>
-                <TypesFilter
-                  pokemonsList={data.results}
-                  setActiveTypes={setActiveTypes}
-                  activeTypes={activeTypes}
-                  setFoundPokemons={setFoundPokemons}
-                />
-              </div>
-            </FiltreContainer>
-          ) : null}
+          <Flex bg='grey' justifyContent={'space-between'}>
+          {dataTypes?.results.map((type, index) => (
+              <Text key={index} fontSize={20}>{type.name}</Text>
+            ))}
+          </Flex>
+
+
           <Grid 
           templateColumns={{ base: '47% 47%', lg: '32% 32% 32%', xl: '24% 24% 24% 24%' }}
           gap={5} 
