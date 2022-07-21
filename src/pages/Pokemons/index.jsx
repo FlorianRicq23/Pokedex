@@ -3,17 +3,20 @@ import { useColorTheme } from '../../utils/hooks'
 import colors from '../../utils/style/colors'
 import { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
-import axios from "axios";
+import axios from 'axios'
+import Pagination from '../../components/Pagination'
 import {
   Spinner,
   Input,
   Center,
-  Select,Box,
+  Select,
+  Box,
   Flex,
   IconButton,
   Text,
   Tooltip,
-  Grid, Container
+  Grid,
+  Container,
 } from '@chakra-ui/react'
 
 import {
@@ -23,47 +26,107 @@ import {
   ChevronLeftIcon,
 } from '@chakra-ui/icons'
 
-
 function Pokemons() {
   const [page, setPage] = useState(0)
   const [limit, setLimit] = useState(20)
   const { colorTheme, setColorTheme } = useColorTheme()
+  const [pokemonsTypes, setPokemonsTypes] = useState(null)
+  const [pokemons, setPokemons] = useState([])
+  const [pokemonsFilter, setPokemonsFilter] = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const [postsPerPage, setPostsPerPage] = useState(12)
+  const [loading, setLoading] = useState(true)
+  const [loadingTypes, setLoadingTypes] = useState(true)
 
-  async function fetchPokemons(page = 0) {
-    const { data } = await axios.get('https://pokeapi.co/api/v2/pokemon?offset=' + page * limit + '&limit=' + limit)
+  async function fetchAllPokemons() {
+    const { data } = await axios.get('https://api.pikaserve.xyz/pokemon/all')
+    return data
+  }
+  const { status, error, data } = useQuery(['listePokemons'], () =>
+    fetchAllPokemons()
+  )
+
+  async function fetchAllTypes() {
+    const { data } = await axios.get('https://api.pikaserve.xyz/types/all')
     return data
   }
 
-  async function fetchTypes() {
-    const { data } = await axios.get('https://pokeapi.co/api/v2/type')
-    return data
-  }
-
-  const { status, error, data, isFetching, isPreviousData } =
-    useQuery(['listePokemons', page, limit], () => fetchPokemons(page), {
-      keepPreviousData: true,
-    })
-
-
-  const { status:statusTypes, error : errorTypes, data : dataTypes, isFetching: isFetchingTypes} =
-    useQuery(['listeTypes'], () => fetchTypes())
-    
-
+  const {
+    status: statusTypes,
+    error: errorTypes,
+    data: dataTypes,
+    isFetching: isFetchingTypes,
+  } = useQuery(['listeTypes'], () => fetchAllTypes())
 
   useEffect(() => {
     document.title = `Pokedex`
     setColorTheme('red')
+    if (status === 'success' && data) {
+      setPokemons(data)
+      setPokemonsFilter(data)
+      if (
+        data.length === pokemons.length &&
+        data.length === pokemonsFilter.length
+      )
+        setLoading(false)
+    }
 
-  })
+    if (statusTypes === 'success' && dataTypes) {
+      let res = dataTypes?.map((type) => type.english)
+      res.unshift('All Types')
+      res.pop()
+      setPokemonsTypes(res)
+      setLoadingTypes(false)
+    }
+  }, [dataTypes, statusTypes, status, data, setColorTheme, pokemons.length])
 
+  let currentPosts
+  const indexOfLastPost = currentPage * postsPerPage
+  const indexOfFirstPost = indexOfLastPost - postsPerPage
 
-  if (error) {
-    return <span>Oups il y a eu un problème</span>
+  if (pokemonsFilter == !pokemons) {
+    pokemons.sort((a, b) => (a.id > b.id ? 1 : -1))
+    currentPosts = pokemons.slice(indexOfFirstPost, indexOfLastPost)
+    pokemons.slice(indexOfFirstPost, indexOfLastPost)
+  } else {
+    pokemonsFilter.sort((a, b) => (a.id > b.id ? 1 : -1))
+    currentPosts = pokemonsFilter.slice(indexOfFirstPost, indexOfLastPost)
+    pokemonsFilter.slice(indexOfFirstPost, indexOfLastPost)
+  }
+
+  const typeFilterFunction = (term) => {
+    if (term === 'All Types') {
+      setPokemonsFilter(pokemons)
+    } else {
+      setPokemonsFilter(
+        pokemons.filter((pokemon) =>
+          pokemon.type.map((type) => type).includes(term)
+        )
+      )
+    }
+    setCurrentPage(1)
+  }
+
+  const searchFilterFunction = (term) => {
+    if (term === '') {
+      setPokemonsFilter(pokemons)
+    } else {
+      setPokemonsFilter(
+        pokemons.filter((pokemon) =>
+          pokemon.name.english.toLowerCase().includes(term.toLowerCase())
+        )
+      )
+    }
+    setCurrentPage(1)
+  }
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber)
   }
 
   return (
-    <Container maxW='1520px'>
-      {status==='loading' ? (
+    <Container maxW="1520px">
+      {loading === true ? (
         <Center>
           <Spinner
             thickness="4px"
@@ -76,94 +139,73 @@ function Pokemons() {
         </Center>
       ) : (
         <div>
-          <Flex bg='grey' justifyContent={'space-between'}>
-          {dataTypes?.results.map((type, index) => (
-              <Text key={index} fontSize={20}>{type.name}</Text>
-            ))}
+          <Flex direction={{ base: 'column', md: 'row' }} alignItems='center' justifyContent='space-around' bg={'rgb(246, 246, 246)'} borderRadius={10} w='80%' ml='auto' mr='auto' mt={5} mb={5}>
+            
+
+            <Flex justifyContent="center" m={{ base: 1, md: 4 }} alignItems="center" w={{ base: '90%', md: '20%' }}>
+              <Select
+                id="typeFilter"
+                w='100%'
+                onChange={(event) => typeFilterFunction(event.target.value)}
+              >
+                {pokemonsTypes?.map((type, index) => (
+                  <option className="option-type" key={index} value={type}>
+                    {type}
+                  </option>
+                ))}
+              </Select>
+            </Flex>
+            <Flex justifyContent="center" m={{ base: 1, md: 4 }} alignItems="center" w={{ base: '90%', md: '40%' }}>
+              <Input
+                className="search-input"
+                id="searchFilter"
+                type="text"
+                placeholder="Pokemon search..."
+                onChange={(event) => searchFilterFunction(event.target.value)}
+                w='100%'
+              />
+            </Flex>
+            <Flex justifyContent="center" m={{ base: 1, md: 4 }} alignItems="center" w={{ base: '90%', md: '20%' }}>
+              <Select
+                w='100%'
+                value={postsPerPage}
+                onChange={(e) => {
+                  setPostsPerPage(e.target.value)
+                  setCurrentPage(1)
+                }}
+              >
+                {[12, 24, 36, 48].map((postsPerPage) => (
+                  <option key={postsPerPage} value={postsPerPage}>
+                    Show {postsPerPage} items
+                  </option>
+                ))}
+              </Select>
+            </Flex>
+            
           </Flex>
-
-
-          <Grid 
-          templateColumns={{ base: '47% 47%', lg: '32% 32% 32%', xl: '24% 24% 24% 24%' }}
-          gap={5} 
-          alignItems={'space-between'} justifyItems='center'>
-            {data?.results.map((pokemon, index) => (
-              <Card key={index} dataN={pokemon.name} />
+          <Grid
+            templateColumns={{
+              base: '47% 47%',
+              lg: '32% 32% 32%',
+              xl: '24% 24% 24% 24%',
+            }}
+            gap={5}
+            alignItems={'space-between'}
+            justifyItems="center"
+          >
+            {currentPosts.map((pokemon, index) => (
+              <Card key={index} dataN={pokemon} />
             ))}
           </Grid>
 
-          <Flex justifyContent="center" m={4} alignItems="center">
-            <Tooltip label="First Page">
-              <IconButton
-                bg={colors.red} color={colors.white}
-                _hover={{ background: colors.red, color: colors.white}}
-                onClick={() => setPage(0)}
-                disabled={page === 0}
-                icon={<ArrowLeftIcon h={3} w={3} />}
-                mr={4}
-              />
-            </Tooltip>
-            <Tooltip label="Previous Page">
-              <IconButton
-                bg={colors.red} color={colors.white}
-                _hover={{ background: colors.red, color: colors.white}}
-                onClick={() => setPage((old) => Math.max(old - 1, 0))}
-                disabled={page === 0}
-                icon={<ChevronLeftIcon h={6} w={6} />}
-                mr={4}
-              />
-            </Tooltip>
-            <Text flexShrink="0">
-              Page{' '}
-              <Text fontWeight="bold" as="span">
-                {page + 1}
-              </Text>{' '}
-              of{' '}
-              <Text fontWeight="bold" as="span">
-                {Math.ceil(data.count / limit)}
-              </Text>
-            </Text>
-            <Tooltip label="Next Page">
-              <IconButton
-                bg={colors.red} color={colors.white}
-                _hover={{ background: colors.red, color: colors.white}}
-                onClick={() => {
-                  if (!isPreviousData && data?.next) {
-                    setPage((old) => old + 1)
-                  }
-                }}
-                disabled={isPreviousData || !data?.next}
-                icon={<ChevronRightIcon h={6} w={6} />}
-                ml={4}
-              />
-            </Tooltip>
-            <Tooltip label="Last Page">
-              <IconButton
-                onClick={() => setPage(Math.ceil(data.count / limit) - 1)}
-                _hover={{ background: colors.red, color: colors.white}}
-                bg={colors.red} color={colors.white}
-                icon={<ArrowRightIcon h={3} w={3} />}
-                disabled={isPreviousData || !data?.next}
-                ml={4}
-              />
-            </Tooltip>
-          </Flex>
-
-          <Flex justifyContent="center" m={4} alignItems="center">
-            <Select
-              w={40}
-              value={limit}
-              onChange={(e) => {
-                setLimit(e.target.value)
-              }}
-            >
-              {[10, 20, 30, 40, 50].map((limit) => (
-                <option key={limit} value={limit}>
-                  Show {limit} items
-                </option>
-              ))}
-            </Select>
-          </Flex>
+          <Pagination
+            postsPerPage={postsPerPage}
+            totalPosts={pokemons.length}
+            paginate={paginate}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            pokemonFilter={pokemonsFilter}
+          />
         </div>
       )}
     </Container>

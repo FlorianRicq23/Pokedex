@@ -135,6 +135,97 @@
     color: #fff;
 }
 
+.Normal {
+    background-color: var(--normal);
+    color: #fff;
+}
+
+.Fire {
+    background-color: var(--fire);
+    color: #fff;
+}
+
+.Water {
+    background-color: var(--water);
+    color: #fff;
+}
+
+.Electric {
+    background-color: var(--electric);
+    color: #000;
+}
+
+.Grass {
+    background-color: var(--grass);
+    color: #fff;
+}
+
+.Ice {
+    background-color: var(--ice);
+    color: #fff;
+}
+
+.Fighting {
+    background-color: var(--fighting);
+    color: #fff;
+}
+
+.Poison {
+    background-color: var(--poison);
+    color: #fff;
+}
+
+.Ground {
+    background-color: var(--ground);
+    color: #fff;
+}
+
+.Flying {
+    background-color: var(--flying);
+    color: #fff;
+}
+
+.Psychic {
+    background-color: var(--psychic);
+    color: #fff;
+}
+
+.Bug {
+    background-color: var(--bug);
+    color: #fff;
+}
+
+.Rock {
+    background-color: var(--rock);
+    color: #fff;
+}
+
+.Ghost,
+.bg-shadow {
+    background-color: var(--ghost);
+    color: #fff;
+}
+
+.Dragon {
+    background-color: var(--dragon);
+    color: #fff;
+}
+
+.Dark {
+    background-color: var(--dark);
+    color: #fff;
+}
+
+.Steel {
+    background-color: var(--steel);
+    color: #fff;
+}
+
+.Fairy {
+    background-color: var(--fairy);
+    color: #fff;
+}
+
 .capitalize-first-letter {
     text-transform: capitalize;
 }
@@ -162,4 +253,57 @@ a {
     max-width: 1320px;
     margin-left: auto;
     margin-right: auto;
+}
+
+.pagination-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    font-family: "PokemonLight";
+}
+
+.pagination {
+    display: flex;
+    padding: 0px 5px;
+    list-style: none;
+}
+
+.pagination .numbers {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    margin: 0px 5px;
+    border-radius: 5px;
+    background: rgb(246, 246, 246);
+    color: #000;
+    font-size: 1rem;
+    font-family: "PokemonLight";
+    cursor: pointer;
+}
+
+.pagination .numbers.active {
+    background: #f00000;
+    color: #fff;
+}
+
+.btn-pag {
+    background: #f00000;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    padding: 0 10px;
+    height: 45px;
+}
+
+.btn-pag.disabled {
+    cursor: default;
+    background: #455f8063;
 }
