@@ -30,19 +30,20 @@ function Pokemon() {
   const { id: query } = useParams()
 
   const { data, isLoading, error } = useQuery(`pokemon${query}`, async () => {
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${query}`)
+    const response = await fetch(`https://api.pikaserve.xyz/pokemon/${query}`)
     const data = await response.json()
     return data
   })
 
   useEffect(() => {
-    document.title = `${data?.name} | Pokedex`
-    setColorTheme(data?.types[0]?.type?.name)
+    document.title = `${data?.name.english} | Pokedex`
+    setColorTheme(data?.type[0])
   })
 
   if (error) {
     return <span>Oups il y a eu un problème</span>
   }
+
 
   return (
     <Container maxW="1520px">
@@ -73,7 +74,7 @@ function Pokemon() {
               h={10}
               m={5}
             >
-              {data?.name}{' '}
+              {data?.name.english}{' '}
               <chakra.span fontSize="24px" color="#8186A0">
                 #{data?.id}
               </chakra.span>
@@ -88,8 +89,9 @@ function Pokemon() {
               <Box maxH={400} w={'50%'}>
                 <Image
                   h={'100%'}
-                  w={'100%'}
-                  src={data?.sprites.other.dream_world.front_default}
+                  mr={'auto'}
+                  ml={'auto'}
+                  src={data?.image.hires}
                   alt="Logo"
                 />
               </Box>
@@ -113,7 +115,7 @@ function Pokemon() {
                   fontFamily="PokemonBold"
                   textAlign={{ base: 'center', md: 'left' }}
                 >
-                  Height : <chakra.span>{data?.height} cm</chakra.span>
+                  Height : <chakra.span>{data?.profile.height}</chakra.span>
                 </Text>
                 <Text
                   fontSize={{ base: '24px', md: '24px' }}
@@ -121,7 +123,7 @@ function Pokemon() {
                   fontFamily="PokemonBold"
                   textAlign={{ base: 'center', md: 'left' }}
                 >
-                  Weight : <chakra.span>{data?.weight} kg</chakra.span>
+                  Weight : <chakra.span>{data?.profile.weight}</chakra.span>
                 </Text>
                 <Box>
                   <Text
@@ -136,15 +138,15 @@ function Pokemon() {
                     gap={5}
                     justifyContent={{ base: 'center', md: 'stretch' }}
                   >
-                    {data?.types.map((t, index) => (
+                    {data?.type.map((t, index) => (
                       <TypeDetails
                         key={index}
                         fontSize="23px"
                         className="capitalize-first-letter"
-                        type={t.type.name}
+                        type={t}
                         style={{ color: 'black' }}
                       >
-                        {t.type.name}
+                        {t}
                       </TypeDetails>
                     ))}
                   </Flex>
@@ -163,16 +165,16 @@ function Pokemon() {
                     gap={5}
                     justifyContent={{ base: 'center', md: 'stretch' }}
                   >
-                    {data?.abilities.map((t, index) => (
+                    {data?.profile.ability.map((t, index) => (
                       <AbilityDetails
                         key={index}
                         fontSize="23px"
                         className="capitalize-first-letter"
-                        type={data?.types[0]?.type?.name}
-                        ability={t.ability.name}
+                        type={data?.type[0]}
+                        ability={t[0]}
                         style={{ color: 'black' }}
                       >
-                        {t.ability.name}
+                        {t[0]}
                       </AbilityDetails>
                     ))}
                   </Flex>
@@ -180,10 +182,9 @@ function Pokemon() {
               </Flex>
             </Flex>
           </Flex>
-          <hr /> 
+          <hr />
 
-          <Flex
-            mb={5}>
+          <Flex mb={5}>
             <Box flex="1" textAlign="center">
               <Heading
                 className="font-bold capitalize-first-letter"
@@ -199,14 +200,95 @@ function Pokemon() {
                   base: '49% 49%',
                   md: '32% 32% 32%',
                 }}
-                justifyContent='space-between'
-                alignContent='space-between'
+                justifyContent="space-between"
+                alignContent="space-between"
               >
-                {data?.stats.map((t, index) => (
-                  <Box
-                    key={index}
+                <Box
+                  fontSize="23px"
+                  className={data?.type[0]}
+                  h={100}
+                  borderRadius={'lg'}
+                  p={2}
+                  mb={2}
+                >
+                  <Flex
+                    flexDirection="column"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Heading
+                      className="font-bold capitalize-first-letter"
+                      fontFamily="PokemonBold"
+                      fontSize={{ base: '24px', md: '26px' }}
+                    >
+                      HP
+                    </Heading>
+                    <Text
+                      fontFamily="PokemonLight"
+                      fontSize={{ base: '20px', md: '20px' }}
+                    >
+                      {data?.base.HP}
+                    </Text>
+                  </Flex>
+                </Box>
+                <Box
+                  fontSize="23px"
+                  className={data?.type[0]}
+                  h={100}
+                  borderRadius={'lg'}
+                  p={2}
+                  mb={2}
+                >
+                  <Flex
+                    flexDirection="column"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Heading
+                      className="font-bold capitalize-first-letter"
+                      fontFamily="PokemonBold"
+                      fontSize={{ base: '24px', md: '26px' }}
+                    >
+                      Attack
+                    </Heading>
+                    <Text
+                      fontFamily="PokemonLight"
+                      fontSize={{ base: '20px', md: '20px' }}
+                    >
+                      {data?.base.Attack}
+                    </Text>
+                  </Flex>
+                </Box>
+                <Box
+                  fontSize="23px"
+                  className={data?.type[0]}
+                  h={100}
+                  borderRadius={'lg'}
+                  p={2}
+                  mb={2}
+                >
+                  <Flex
+                    flexDirection="column"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Heading
+                      className="font-bold capitalize-first-letter"
+                      fontFamily="PokemonBold"
+                      fontSize={{ base: '24px', md: '26px' }}
+                    >
+                      Defense
+                    </Heading>
+                    <Text
+                      fontFamily="PokemonLight"
+                      fontSize={{ base: '20px', md: '20px' }}
+                    >
+                      {data?.base.Defense}
+                    </Text>
+                  </Flex>
+                </Box><Box
                     fontSize="23px"
-                    className={data?.types[0]?.type?.name}
+                    className={data?.type[0]}
                     h={100}
                     borderRadius={'lg'}
                     p={2}
@@ -222,22 +304,75 @@ function Pokemon() {
                         fontFamily="PokemonBold"
                         fontSize={{ base: '24px', md: '26px' }}
                       >
-                        {t.stat.name}
+                        SP. Attack
                       </Heading>
                       <Text
                         fontFamily="PokemonLight"
                         fontSize={{ base: '20px', md: '20px' }}
                       >
-                        {t.base_stat}
+                        {data?.base['Sp. Attack']}
+                      </Text>
+                    </Flex>
+                  </Box><Box
+                    fontSize="23px"
+                    className={data?.type[0]}
+                    h={100}
+                    borderRadius={'lg'}
+                    p={2}
+                    mb={2}
+                  >
+                    <Flex
+                      flexDirection="column"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Heading
+                        className="font-bold capitalize-first-letter"
+                        fontFamily="PokemonBold"
+                        fontSize={{ base: '24px', md: '26px' }}
+                      >
+                        SP. Defense
+                      </Heading>
+                      <Text
+                        fontFamily="PokemonLight"
+                        fontSize={{ base: '20px', md: '20px' }}
+                      >
+                        {data?.base['Sp. Defense']}
+                      </Text>
+                    </Flex>
+                  </Box><Box
+                    fontSize="23px"
+                    className={data?.type[0]}
+                    h={100}
+                    borderRadius={'lg'}
+                    p={2}
+                    mb={2}
+                  >
+                    <Flex
+                      flexDirection="column"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Heading
+                        className="font-bold capitalize-first-letter"
+                        fontFamily="PokemonBold"
+                        fontSize={{ base: '24px', md: '26px' }}
+                      >
+                        Speed
+                      </Heading>
+                      <Text
+                        fontFamily="PokemonLight"
+                        fontSize={{ base: '20px', md: '20px' }}
+                      >
+                        {data?.base['Speed']}
                       </Text>
                     </Flex>
                   </Box>
-                ))}
               </Grid>
             </Box>
           </Flex>
 
-          <Accordion allowToggle>
+          {/* <Accordion allowToggle>
             <AccordionItem>
               <h2>
                 <AccordionButton>
@@ -284,7 +419,7 @@ function Pokemon() {
                 </Flex>
               </AccordionPanel>
             </AccordionItem>
-          </Accordion>
+          </Accordion> */}
         </Box>
       )}
     </Container>
