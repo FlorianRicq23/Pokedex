@@ -50,7 +50,6 @@ function Pokemons() {
     const { data } = await axios.get('https://api.pikaserve.xyz/types/all')
     return data
   }
-
   const {
     status: statusTypes,
     error: errorTypes,
@@ -61,14 +60,14 @@ function Pokemons() {
   useEffect(() => {
     document.title = `Pokedex`
     setColorTheme('red')
-    if (status === 'success' && data) {
+    if (status === 'success' && data && loading===true) {
       setPokemons(data)
       setPokemonsFilter(data)
       if (
         data.length === pokemons.length &&
         data.length === pokemonsFilter.length
       )
-        setLoading(false)
+      setLoading(false)
     }
 
     if (statusTypes === 'success' && dataTypes) {
@@ -78,13 +77,15 @@ function Pokemons() {
       setPokemonsTypes(res)
       setLoadingTypes(false)
     }
-  }, [dataTypes, statusTypes, status, data, setColorTheme, pokemons.length])
+  }, [dataTypes, statusTypes, status, data, setColorTheme,pokemonsFilter.length, pokemons.length])
 
   let currentPosts
   const indexOfLastPost = currentPage * postsPerPage
   const indexOfFirstPost = indexOfLastPost - postsPerPage
+  const [maxPageNumberLimit, setMaxPageNumberLimit] = useState(5)
+  const [minPageNumberLimit, setMinPageNumberLimit] = useState(0)
 
-  if (pokemonsFilter == !pokemons) {
+  if (pokemonsFilter ===!pokemons) {
     pokemons.sort((a, b) => (a.id > b.id ? 1 : -1))
     currentPosts = pokemons.slice(indexOfFirstPost, indexOfLastPost)
     pokemons.slice(indexOfFirstPost, indexOfLastPost)
@@ -105,6 +106,8 @@ function Pokemons() {
       )
     }
     setCurrentPage(1)
+    setMinPageNumberLimit(0)
+    setMaxPageNumberLimit(5)
   }
 
   const searchFilterFunction = (term) => {
@@ -117,11 +120,12 @@ function Pokemons() {
         )
       )
     }
+    const typeFilterReset = document.querySelector("#typeFilter");
+    typeFilterReset.value = "All Types";
     setCurrentPage(1)
-  }
 
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber)
+    setMinPageNumberLimit(0)
+    setMaxPageNumberLimit(5)
   }
 
   return (
@@ -140,8 +144,6 @@ function Pokemons() {
       ) : (
         <div>
           <Flex direction={{ base: 'column', md: 'row' }} alignItems='center' justifyContent='space-around' bg={'rgb(246, 246, 246)'} borderRadius={10} w='80%' ml='auto' mr='auto' mt={5} mb={5}>
-            
-
             <Flex justifyContent="center" m={{ base: 1, md: 4 }} alignItems="center" w={{ base: '90%', md: '20%' }}>
               <Select
                 id="typeFilter"
@@ -201,10 +203,13 @@ function Pokemons() {
           <Pagination
             postsPerPage={postsPerPage}
             totalPosts={pokemons.length}
-            paginate={paginate}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             pokemonFilter={pokemonsFilter}
+            maxPageNumberLimit={maxPageNumberLimit}
+            setMaxPageNumberLimit={setMaxPageNumberLimit}
+            minPageNumberLimit={minPageNumberLimit}
+            setMinPageNumberLimit={setMinPageNumberLimit}
           />
         </div>
       )}
