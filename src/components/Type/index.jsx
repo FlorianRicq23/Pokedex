@@ -10,7 +10,7 @@ function Type({ type }) {
       flexDirection={'row'}
       justifyContent='flex-start'
       alignItems={'center'}
-      p={2}
+      p={1}
       h={{ base: 30, md:45}}
       borderRadius={15}
       backgroundColor="rgba(255, 255, 255, 0.3)"

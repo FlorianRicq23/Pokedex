@@ -93,8 +93,8 @@ function Card2({ dataN }) {
                   alt="Image de presentation de {dataN.name}"
                 />
               </Box>
-              <Box>
-                <Flex gap={1}>
+              <Box w={150}>
+                <Flex gap={1} justifyContent={'space-between'} w='100%'>
                   {dataN.type.map((t, index) => (
                     <Type
                       key={index}
