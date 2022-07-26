@@ -11,12 +11,12 @@ function Type({ type }) {
       justifyContent='flex-start'
       alignItems={'center'}
       p={2}
-      h={{ base: 35, md:45}}
+      h={{ base: 30, md:45}}
       borderRadius={15}
       backgroundColor="rgba(255, 255, 255, 0.3)"
     >
-      <Image marginRight={{ base: 1, md:3}} h={{ base: '22px', md:'33px'}} src={url} alt="Logo" />
-      <Text className="capitalize-first-letter" fontSize={{ base: '14dpx', md:'20px'}}>
+      <Image marginRight={{ base: 0.5, md:3}} h={{ base: '19px', md:'33px'}} src={url} alt="Logo" />
+      <Text className="capitalize-first-letter" fontSize={{ base: '16px', md:'20px'}}>
         {type}{' '}
       </Text>
     </Flex>

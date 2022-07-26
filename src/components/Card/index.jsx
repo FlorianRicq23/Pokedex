@@ -69,8 +69,8 @@ function Card2({ dataN }) {
           <Box
             className={containerColor}
             color={colors.black}
-            borderRadius={30}
-            p={2}
+            borderRadius={20}
+            p={1}
             h={200}
             w="100%"
             display={{ md: 'none' }}
@@ -94,18 +94,18 @@ function Card2({ dataN }) {
                 />
               </Box>
               <Box>
-                <HStack>
+                <Flex gap={1}>
                   {dataN.type.map((t, index) => (
                     <Type
                       key={index}
-                      fontSize="23px"
+                      fontSize="20px"
                       className="capitalize-first-letter"
                       type={t}
                     >
                       {t}
                     </Type>
                   ))}
-                </HStack>
+                </Flex>
               </Box>
             </Flex>
           </Box>
