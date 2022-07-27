@@ -1,7 +1,7 @@
 import { Image, Flex, Text } from '@chakra-ui/react'
 
 function TypeDetails({ type }) {
-  const url = '/types/bigtypes/' + type + '.png'
+  const url = '/types2/bigtypes/' + type + '.png'
   return (
     <Flex
       className={type}
