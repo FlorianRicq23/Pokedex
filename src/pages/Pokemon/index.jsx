@@ -32,6 +32,8 @@ function Pokemon() {
   useEffect(() => {
     document.title = `${data?.name.english} | Pokedex`
     setColorTheme(data?.type[0])
+    console.log(test)
+    //ajouter callback ,[]
   })
 
   if (error) {

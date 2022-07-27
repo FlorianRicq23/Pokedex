@@ -14,8 +14,7 @@ import {
   Container,
 } from '@chakra-ui/react'
 
-
-function Pokemons() {
+function Home() {
   const { setColorTheme } = useColorTheme()
   const [pokemonsTypes, setPokemonsTypes] = useState(null)
   const [pokemons, setPokemons] = useState([])
@@ -33,8 +32,6 @@ function Pokemons() {
     fetchAllPokemons()
   )
 
-
-
   async function fetchAllTypes() {
     const { data } = await axios.get('https://api.pikaserve.xyz/types/all')
     return data
@@ -43,34 +40,12 @@ function Pokemons() {
     status: statusTypes,
     error: errorTypes,
     data: dataTypes,
-    isFetching: isFetchingTypes,
   } = useQuery(['listeTypes'], () => fetchAllTypes())
 
   useEffect(() => {
     document.title = `Pokedex`
     setColorTheme('red')
-    if (status === 'success' && data && loading===true) {
-      setPokemons(data)
-      setPokemonsFilter(data)
-      if (
-        data.length === pokemons.length &&
-        data.length === pokemonsFilter.length
-      )
-      setLoading(false)
-    }
-
-    if (error || errorTypes) return <span>Oups il y a eu un problème</span>
-
-
-  
-    if (statusTypes === 'success' && dataTypes) {
-      let res = dataTypes?.map((type) => type.english)
-      res.unshift('All Types')
-      res.pop()
-      setPokemonsTypes(res)
-      setLoadingTypes(false)
-    }
-  }, [dataTypes, statusTypes, status, data, setColorTheme,pokemonsFilter.length, pokemons.length])
+  }, [setColorTheme])
 
   let currentPosts
   const indexOfLastPost = currentPage * postsPerPage
@@ -78,7 +53,7 @@ function Pokemons() {
   const [maxPageNumberLimit, setMaxPageNumberLimit] = useState(5)
   const [minPageNumberLimit, setMinPageNumberLimit] = useState(0)
 
-  if (pokemonsFilter ===!pokemons) {
+  /*   if (pokemonsFilter ===!pokemons) {
     pokemons.sort((a, b) => (a.id > b.id ? 1 : -1))
     currentPosts = pokemons.slice(indexOfFirstPost, indexOfLastPost)
     pokemons.slice(indexOfFirstPost, indexOfLastPost)
@@ -87,7 +62,6 @@ function Pokemons() {
     currentPosts = pokemonsFilter.slice(indexOfFirstPost, indexOfLastPost)
     pokemonsFilter.slice(indexOfFirstPost, indexOfLastPost)
   }
-
   const typeFilterFunction = (term) => {
     if (term === 'All Types') {
       setPokemonsFilter(pokemons)
@@ -102,7 +76,6 @@ function Pokemons() {
     setMinPageNumberLimit(0)
     setMaxPageNumberLimit(5)
   }
-
   const searchFilterFunction = (term) => {
     if (term === '') {
       setPokemonsFilter(pokemons)
@@ -119,12 +92,13 @@ function Pokemons() {
 
     setMinPageNumberLimit(0)
     setMaxPageNumberLimit(5)
-  }
+  } */
 
+  if (error || errorTypes) return <span>Oups il y a eu un problème</span>
 
   return (
     <Container maxW="1520px">
-      {loading === true ? (
+      {status === 'loading' ? (
         <Center>
           <Spinner
             thickness="4px"
@@ -137,33 +111,63 @@ function Pokemons() {
         </Center>
       ) : (
         <div>
-          <Flex direction={{ base: 'column', md: 'row' }} alignItems='center' justifyContent='space-around' bg={'rgb(246, 246, 246)'} borderRadius={10} w='80%' ml='auto' mr='auto' mt={5} mb={5}>
-            <Flex justifyContent="center" m={{ base: 1, md: 4 }} alignItems="center" w={{ base: '90%', md: '20%' }}>
+          <Flex
+            direction={{ base: 'column', md: 'row' }}
+            alignItems="center"
+            justifyContent="space-around"
+            bg={'rgb(246, 246, 246)'}
+            borderRadius={10}
+            w="80%"
+            ml="auto"
+            mr="auto"
+            mt={5}
+            mb={5}
+          >
+            <Flex
+              justifyContent="center"
+              m={{ base: 1, md: 4 }}
+              alignItems="center"
+              w={{ base: '90%', md: '20%' }}
+            >
               <Select
                 id="typeFilter"
-                w='100%'
-                onChange={(event) => typeFilterFunction(event.target.value)}
+                w="100%"
+                //onChange={(event) => typeFilterFunction(event.target.value)}
               >
-                {pokemonsTypes?.map((type, index) => (
-                  <option className="option-type" key={index} value={type}>
-                    {type}
+                {dataTypes?.map((type, index) => (
+                  <option
+                    className="option-type"
+                    key={index}
+                    value={type.english}
+                  >
+                    {type.english}
                   </option>
                 ))}
               </Select>
             </Flex>
-            <Flex justifyContent="center" m={{ base: 1, md: 4 }} alignItems="center" w={{ base: '90%', md: '40%' }}>
+            <Flex
+              justifyContent="center"
+              m={{ base: 1, md: 4 }}
+              alignItems="center"
+              w={{ base: '90%', md: '40%' }}
+            >
               <Input
                 className="search-input"
                 id="searchFilter"
                 type="text"
                 placeholder="Pokemon search..."
-                onChange={(event) => searchFilterFunction(event.target.value)}
-                w='100%'
+                //onChange={(event) => searchFilterFunction(event.target.value)}
+                w="100%"
               />
             </Flex>
-            <Flex justifyContent="center" m={{ base: 1, md: 4 }} alignItems="center" w={{ base: '90%', md: '20%' }}>
+            <Flex
+              justifyContent="center"
+              m={{ base: 1, md: 4 }}
+              alignItems="center"
+              w={{ base: '90%', md: '20%' }}
+            >
               <Select
-                w='100%'
+                w="100%"
                 value={postsPerPage}
                 onChange={(e) => {
                   setPostsPerPage(e.target.value)
@@ -177,7 +181,6 @@ function Pokemons() {
                 ))}
               </Select>
             </Flex>
-            
           </Flex>
           <Grid
             templateColumns={{
@@ -189,17 +192,19 @@ function Pokemons() {
             alignItems={'space-between'}
             justifyItems="center"
           >
-            {currentPosts?.map((pokemon, index) => (
+            {data
+            .slice(indexOfFirstPost, indexOfLastPost)
+            .map((pokemon, index) => (
               <Card key={index} dataN={pokemon} />
             ))}
           </Grid>
 
           <Pagination
             postsPerPage={postsPerPage}
-            totalPosts={pokemons.length}
+            totalPosts={data?.length}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-            pokemonFilter={pokemonsFilter}
+            pokemonFilter={data}
             maxPageNumberLimit={maxPageNumberLimit}
             setMaxPageNumberLimit={setMaxPageNumberLimit}
             minPageNumberLimit={minPageNumberLimit}
@@ -211,4 +216,4 @@ function Pokemons() {
   )
 }
 
-export default Pokemons
+export default Home

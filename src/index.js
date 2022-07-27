@@ -10,6 +10,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import './utils/style/styles.css'
 import { ColorThemeProvider } from './utils/context'
+import Home from './pages/Home'
 
 const queryClient = new QueryClient()
 
@@ -23,6 +24,7 @@ root.render(
             <Header />
             <Routes>
               <Route exact path="/" element={<Pokemons />} />
+              <Route exact path="/test" element={<Home />} />
               <Route exact path="/pokemons" element={<Pokemons />} />
               <Route
                 path="/pokemon/:id"
