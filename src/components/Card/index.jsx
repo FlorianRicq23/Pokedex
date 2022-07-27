@@ -1,14 +1,10 @@
 import colors from '../../utils/style/colors'
-import { useQuery } from 'react-query'
 import Type from '../../components/Type'
 import { Link } from 'react-router-dom'
 import {
   Box,
-  Center,
   Image,
-  Spinner,
   VStack,
-  HStack,
   Grid,
   Flex,
   Heading,
@@ -93,8 +89,8 @@ function Card2({ dataN }) {
                   alt="Image de presentation de {dataN.name}"
                 />
               </Box>
-              <Box w={150}>
-                <Flex gap={1} justifyContent={'space-between'} w='100%'>
+              <Box w='100%'>
+                <Flex gap={1} justifyContent={'space-between'} w='150px'>
                   {dataN.type.map((t, index) => (
                     <Type
                       key={index}

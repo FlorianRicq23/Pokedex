@@ -3,7 +3,6 @@ import { useQuery } from 'react-query'
 import { useEffect } from 'react'
 import TypeDetails from '../../components/TypeDetails'
 import { useColorTheme } from '../../utils/hooks'
-import colors from '../../utils/style/colors'
 
 import {
   Spinner,
@@ -14,18 +13,13 @@ import {
   chakra,
   Heading,
   Image,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
   Grid,
   Container,
 } from '@chakra-ui/react'
 import AbilityDetails from '../../components/AbilityDetails'
 
 function Pokemon() {
-  const { colorTheme, setColorTheme } = useColorTheme()
+  const { setColorTheme } = useColorTheme()
 
   const { id: query } = useParams()
 

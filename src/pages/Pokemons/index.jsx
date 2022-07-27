@@ -1,6 +1,5 @@
 import Card from '../../components/Card'
 import { useColorTheme } from '../../utils/hooks'
-import colors from '../../utils/style/colors'
 import { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
 import axios from 'axios'
@@ -10,26 +9,14 @@ import {
   Input,
   Center,
   Select,
-  Box,
   Flex,
-  IconButton,
-  Text,
-  Tooltip,
   Grid,
   Container,
 } from '@chakra-ui/react'
 
-import {
-  ArrowRightIcon,
-  ArrowLeftIcon,
-  ChevronRightIcon,
-  ChevronLeftIcon,
-} from '@chakra-ui/icons'
 
 function Pokemons() {
-  const [page, setPage] = useState(0)
-  const [limit, setLimit] = useState(20)
-  const { colorTheme, setColorTheme } = useColorTheme()
+  const { setColorTheme } = useColorTheme()
   const [pokemonsTypes, setPokemonsTypes] = useState(null)
   const [pokemons, setPokemons] = useState([])
   const [pokemonsFilter, setPokemonsFilter] = useState([])
@@ -45,6 +32,8 @@ function Pokemons() {
   const { status, error, data } = useQuery(['listePokemons'], () =>
     fetchAllPokemons()
   )
+
+
 
   async function fetchAllTypes() {
     const { data } = await axios.get('https://api.pikaserve.xyz/types/all')
@@ -70,6 +59,9 @@ function Pokemons() {
       setLoading(false)
     }
 
+    if (error || errorTypes) return <Flex>Il y a eu une erreur</Flex>
+
+  
     if (statusTypes === 'success' && dataTypes) {
       let res = dataTypes?.map((type) => type.english)
       res.unshift('All Types')
@@ -100,10 +92,10 @@ function Pokemons() {
       setPokemonsFilter(pokemons)
     } else {
       setPokemonsFilter(
-        pokemons.filter((pokemon) =>
+      pokemons.filter((pokemon) =>
           pokemon.type.map((type) => type).includes(term)
-        )
-      )
+        ))
+      
     }
     setCurrentPage(1)
     setMinPageNumberLimit(0)
@@ -127,6 +119,7 @@ function Pokemons() {
     setMinPageNumberLimit(0)
     setMaxPageNumberLimit(5)
   }
+
 
   return (
     <Container maxW="1520px">
@@ -195,7 +188,7 @@ function Pokemons() {
             alignItems={'space-between'}
             justifyItems="center"
           >
-            {currentPosts.map((pokemon, index) => (
+            {currentPosts?.map((pokemon, index) => (
               <Card key={index} dataN={pokemon} />
             ))}
           </Grid>
