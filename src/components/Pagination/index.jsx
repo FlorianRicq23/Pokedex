@@ -48,6 +48,10 @@ const Pagination = ({
     setCurrentPage(pageNumber)
     console.log(pageNumber)
     if (pageNumber===1) initPaginate();
+    if (pageNumber===2) {
+      setMinPageNumberLimit(0)
+      setMaxPageNumberLimit(5)
+    }
     if(pageNumber>3) {
       setMinPageNumberLimit(pageNumber-3)
       setMaxPageNumberLimit(pageNumber+2)
@@ -59,6 +63,10 @@ const Pagination = ({
   const prevButton = (e) => {
     setCurrentPage((prev) => (prev === 1 ? prev : prev - 1))
     
+    if (currentPage===2) {
+      setMinPageNumberLimit(0)
+      setMaxPageNumberLimit(5)
+    }
     if(currentPage>3) {
       setMinPageNumberLimit(currentPage-4)
       setMaxPageNumberLimit(currentPage+1)

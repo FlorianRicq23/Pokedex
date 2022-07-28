@@ -16,13 +16,10 @@ import {
 
 function Home() {
   const { setColorTheme } = useColorTheme()
-  const [pokemonsTypes, setPokemonsTypes] = useState(null)
-  const [pokemons, setPokemons] = useState([])
-  const [pokemonsFilter, setPokemonsFilter] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [postsPerPage, setPostsPerPage] = useState(12)
-  const [loading, setLoading] = useState(true)
-  const [loadingTypes, setLoadingTypes] = useState(true)
+  const [selectedType, setSelectedType] = useState("All types");
+  const [inputQuery, setInputQuery] = useState("");
 
   async function fetchAllPokemons() {
     const { data } = await axios.get('https://api.pikaserve.xyz/pokemon/all')
@@ -76,23 +73,7 @@ function Home() {
     setMinPageNumberLimit(0)
     setMaxPageNumberLimit(5)
   }
-  const searchFilterFunction = (term) => {
-    if (term === '') {
-      setPokemonsFilter(pokemons)
-    } else {
-      setPokemonsFilter(
-        pokemons.filter((pokemon) =>
-          pokemon.name.english.toLowerCase().includes(term.toLowerCase())
-        )
-      )
-    }
-    const typeFilterReset = document.querySelector("#typeFilter");
-    typeFilterReset.value = "All Types";
-    setCurrentPage(1)
-
-    setMinPageNumberLimit(0)
-    setMaxPageNumberLimit(5)
-  } */
+   */
 
   if (error || errorTypes) return <span>Oups il y a eu un problème</span>
 
@@ -132,8 +113,19 @@ function Home() {
               <Select
                 id="typeFilter"
                 w="100%"
-                //onChange={(event) => typeFilterFunction(event.target.value)}
+                onChange={(e) => {
+                  setSelectedType(e.target.value)
+                  setCurrentPage(1)
+                  setMinPageNumberLimit(0)
+                  setMaxPageNumberLimit(5)
+                }}
               >
+                 <option
+                    className="option-type"
+                    value={"All types"}
+                  >
+                    All Types
+                  </option>
                 {dataTypes?.map((type, index) => (
                   <option
                     className="option-type"
@@ -156,7 +148,12 @@ function Home() {
                 id="searchFilter"
                 type="text"
                 placeholder="Pokemon search..."
-                //onChange={(event) => searchFilterFunction(event.target.value)}
+                onChange={(e) => {
+                  setInputQuery(e.target.value)
+                  setCurrentPage(1)
+                  setMinPageNumberLimit(0)
+                  setMaxPageNumberLimit(5)
+                }}
                 w="100%"
               />
             </Flex>
@@ -193,6 +190,8 @@ function Home() {
             justifyItems="center"
           >
             {data
+            .filter(pokemon => selectedType==="All types" ? pokemon :  pokemon.type.map((type) => type).includes(selectedType))
+            .filter((pokemon) => pokemon.name.english.toLowerCase().includes(inputQuery.toLowerCase()))
             .slice(indexOfFirstPost, indexOfLastPost)
             .map((pokemon, index) => (
               <Card key={index} dataN={pokemon} />
@@ -204,7 +203,9 @@ function Home() {
             totalPosts={data?.length}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
-            pokemonFilter={data}
+            pokemonFilter={data
+              .filter(pokemon => selectedType==="All types" ? pokemon :  pokemon.type.map((type) => type).includes(selectedType))
+              .filter((pokemon) => pokemon.name.english.toLowerCase().includes(inputQuery.toLowerCase()))}
             maxPageNumberLimit={maxPageNumberLimit}
             setMaxPageNumberLimit={setMaxPageNumberLimit}
             minPageNumberLimit={minPageNumberLimit}
