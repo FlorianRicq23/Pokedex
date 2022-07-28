@@ -8,6 +8,7 @@ import {
   Grid,
   Flex,
   Heading,
+  Center,
 } from '@chakra-ui/react'
 
 function Card2({ dataN }) {
@@ -85,12 +86,12 @@ function Card2({ dataN }) {
                 <Image
                   h={90}
                   w={90}
-                  src={dataN.image.hires}
+                  src={dataN.image.thumbnail}
                   alt="Image de presentation de {dataN.name}"
                 />
               </Box>
               <Box w='100%'>
-                <Flex gap={1} justifyContent={'space-between'} w='150px'>
+                 <Flex gap={1} justifyContent={'center'} w='150px'>
                   {dataN.type.map((t, index) => (
                     <Type
                       key={index}
