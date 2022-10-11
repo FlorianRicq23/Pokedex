@@ -26,9 +26,12 @@ function Pokemons() {
     const { data } = await axios.get('https://api.pikaserve.xyz/pokemon/all')
     return data
   }
-  const { status, error, data } = useQuery(['listePokemons'], () =>
+
+  /* const { status, error, data } = useQuery(['listePokemons'], () =>
     fetchAllPokemons()
-  )
+  ) */
+  const data = pokemonsList;
+  const error = null;
 
   async function fetchAllTypes() {
     const { data } = await axios.get('https://api.pikaserve.xyz/types/all')
@@ -54,7 +57,7 @@ function Pokemons() {
 
   return (
     <Container maxW="1520px">
-      {status === 'loading' ? (
+      {error === 'loading' ? (
         <Center>
           <Spinner
             thickness="4px"
@@ -164,7 +167,7 @@ function Pokemons() {
             alignItems={'space-between'}
             justifyItems="center"
           >
-            {pokemonsList
+            {data
             .filter(pokemon => selectedType==="All types" ? pokemon :  pokemon.type.map((type) => type).includes(selectedType))
             .filter((pokemon) => pokemon.name.english.toLowerCase().includes(inputQuery.toLowerCase()))
             .slice(indexOfFirstPost, indexOfLastPost)
