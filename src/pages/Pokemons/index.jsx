@@ -2,6 +2,7 @@ import Card from '../../components/Card'
 import { useColorTheme } from '../../utils/hooks'
 import { useState, useEffect } from 'react'
 import { useQuery } from 'react-query'
+import { pokemonsList } from '../../datas/pokemonsList'
 import axios from 'axios'
 import Pagination from '../../components/Pagination'
 import {
@@ -163,7 +164,7 @@ function Pokemons() {
             alignItems={'space-between'}
             justifyItems="center"
           >
-            {data
+            {pokemonsList
             .filter(pokemon => selectedType==="All types" ? pokemon :  pokemon.type.map((type) => type).includes(selectedType))
             .filter((pokemon) => pokemon.name.english.toLowerCase().includes(inputQuery.toLowerCase()))
             .slice(indexOfFirstPost, indexOfLastPost)

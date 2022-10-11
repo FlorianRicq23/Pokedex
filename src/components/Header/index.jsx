@@ -17,7 +17,6 @@ function Header() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { colorTheme } = useColorTheme()  
 
-
   return (
     <>
       <Box className={colorTheme} color={colors.white} px={4}>
