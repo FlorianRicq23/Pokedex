@@ -80,9 +80,9 @@ function Pokemon() {
               flexDirection={{ base: 'column', md: 'row' }}
               alignItems={{ base: 'center', md: 'stretch' }}
             >
-              <Box maxH={{ base: 220, sm: 400, md: 400, lg:400 }} w={'50%'}>
+              <Box w={'50%'}>
                 <Image
-                  h={'100%'}
+                   maxH={{ base: 220, sm: 400, md: 400, lg:400 }} 
                   mr={'auto'}
                   ml={'auto'}
                   src={data?.image.hires}
