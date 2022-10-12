@@ -3,6 +3,7 @@ import { useQuery } from 'react-query'
 import { useEffect } from 'react'
 import TypeDetails from '../../components/TypeDetails'
 import { useColorTheme } from '../../utils/hooks'
+import { pokemonsList } from '../../datas/pokemonsList'
 
 import {
   Spinner,
@@ -23,11 +24,13 @@ function Pokemon() {
 
   const { id: query } = useParams()
 
-  const { data, isLoading, error } = useQuery(`pokemon${query}`, async () => {
+  /* const { data, isLoading, error } = useQuery(`pokemon${query}`, async () => {
     const response = await fetch(`https://api.pikaserve.xyz/pokemon/${query}`)
     const data = await response.json()
     return data
-  })
+  }) */
+  const data = pokemonsList[query];
+  const error = null;
 
   useEffect(() => {
     document.title = `${data?.name.english} | Pokedex`
@@ -41,7 +44,7 @@ function Pokemon() {
 
   return (
     <Container maxW="1520px">
-      {isLoading ? (
+      {error ? (
         <Center>
           <Spinner
             thickness="4px"
