@@ -29,12 +29,14 @@ function Pokemon() {
     const data = await response.json()
     return data
   }) */
-  const data = pokemonsList[query];
+  const data = pokemonsList[query-1];
   const error = null;
 
   useEffect(() => {
     document.title = `${data?.name.english} | Pokedex`
     setColorTheme(data?.type[0])
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
   }, [data?.name.english, setColorTheme, data?.type])
 
   if (error) {
